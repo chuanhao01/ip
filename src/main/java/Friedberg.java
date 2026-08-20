@@ -53,19 +53,10 @@ public class Friedberg {
             } else if (command.equals("list")) {
                 this.listTasks();
             } else {
-                String[] words = userInput.split("\\s+");
-                // Check if its mark/unmark no.
-                if (words.length == 2) {
-                    command = words[0];
-                    if (command.equals("mark")) {
-                        this.markTask(Integer.parseInt(words[1]) - 1);
-                    } else if (command.equals("unmark")) {
-                        this.unmarkTask(Integer.parseInt(words[1]) - 1);
-                    } else {
-                        this.addTask(userInput);
-                    }
+                if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
+                    this.markCommand(userInput);
                 } else {
-                    this.addTask(userInput);
+                    this.addTaskCommand(userInput);
                 }
             }
             System.out.println("____________________________________________________________");
@@ -74,26 +65,37 @@ public class Friedberg {
         stdin.close();
     }
 
-    public void markTask(int taskIndex) {
-        if (this.checkValidTaskIndex(taskIndex)) {
-            Task task = this.tasks[taskIndex];
-            task.mark();
-            System.out.println("Nice! I've marked this task as done:");
-            System.out.println(task.renderTask());
-        } else {
+    public void markCommand(String userInput) {
+        String[] words = userInput.split("\\s+");
+        if (words.length != 2) {
             System.out.println("Unable to mark this task");
+            return;
+        }
+        String command = words[0];
+        int taskIndex = Integer.parseInt(words[1]) - 1;
+        if (!this.checkValidTaskIndex(taskIndex)) {
+            System.out.println("Unable to mark this task");
+            return;
+        }
+        if (command.equals("mark")) {
+            this.markTask(taskIndex);
+        } else if (command.equals("unmark")) {
+            this.unmarkTask(taskIndex);
         }
     }
 
-    public void unmarkTask(int taskIndex){
-        if (this.checkValidTaskIndex(taskIndex)) {
-            Task task = this.tasks[taskIndex];
-            task.unmark();
-            System.out.println("OK, I've marked this task as not done yet:");
-            System.out.println(task.renderTask());
-        } else {
-            System.out.println("Unable to unmark this task");
-        }
+    public void markTask(int taskIndex) {
+        Task task = this.tasks[taskIndex];
+        task.mark();
+        System.out.println("Nice! I've marked this task as done:");
+        System.out.println(task.renderTask());
+    }
+
+    public void unmarkTask(int taskIndex) {
+        Task task = this.tasks[taskIndex];
+        task.unmark();
+        System.out.println("OK, I've marked this task as not done yet:");
+        System.out.println(task.renderTask());
     }
 
     /**
@@ -112,10 +114,71 @@ public class Friedberg {
         }
     }
 
-    public void addTask(String userInput) {
-        Task task = new Task(userInput);
+    public Task createDeadline(String userInput){
+        userInput = userInput.replace("deadline ", "");
+        String[] words = userInput.split("/by ");
+        // For later error level
+        if (words.length != 2){
+            System.out.println("Error adding deadline");
+            return null;
+        }
+        String taskName = words[0].strip();
+        String byDatetime = words[1].strip();
+        Task task = new Deadline(taskName, byDatetime);
         this.tasks[this.totalNumOfTasks] = task;
         this.totalNumOfTasks += 1;
-        System.out.println(String.format("added: %s", task.renderTask()));
+        return task;
+    }
+
+    public Task createTodo(String userInput){
+        userInput = userInput.replace("todo  ", "");
+        String taskName = userInput.strip();
+        Task task = new ToDo(taskName);
+        this.tasks[this.totalNumOfTasks] = task;
+        this.totalNumOfTasks += 1;
+        return task;
+    }
+    public Task createEvent(String userInput){
+        userInput = userInput.replace("event  ", "");
+        String[] words = userInput.split("/from ");
+        if (words.length != 2){
+            System.out.println("Error adding event");
+            return null;
+        }
+        String taskName = words[0].strip();
+        words = words[1].split("/to ");
+        if (words.length != 2){
+            System.out.println("Error adding event");
+            return null;
+        }
+        String fromDatetime = words[0].strip();
+        String toDatetime = words[1].strip();
+        Task task = new Event(taskName, fromDatetime, toDatetime);
+        this.tasks[this.totalNumOfTasks] = task;
+        this.totalNumOfTasks += 1;
+        return task;
+    }
+
+    public void addTaskCommand(String userInput) {
+        String[] words = userInput.split(" ");
+        String command = words[0];
+        Task task;
+        if (command.equals("deadline")){
+            task = this.createDeadline(userInput);
+        } else if (command.equals("todo")){
+            task = this.createTodo(userInput);
+        } else if (command.equals("event")){
+            task = this.createEvent(userInput);
+        } else {
+            System.out.println("Error adding task");
+            return;
+        }
+        if (task == null){
+            System.out.println("Error adding task");
+            return;
+        }
+        System.out.println("Got it. I've added this task:");
+        System.out.println(task.renderTask());
+        System.out.println(String.format("Now you have %d tasks in the list.", this.totalNumOfTasks));
     }
 }
