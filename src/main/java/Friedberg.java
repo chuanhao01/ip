@@ -64,6 +64,8 @@ public class Friedberg {
                         } else if (userInput.startsWith("deadline") || userInput.startsWith("todo")
                                 || userInput.startsWith("event")) {
                             this.addTaskCommand(userInput);
+                        } else if (userInput.startsWith("delete")) {
+                            this.deleteCommand(userInput);
                         } else {
                             throw new FriedbergCommandException("Unknown command given by user", userInput);
                         }
@@ -93,7 +95,6 @@ public class Friedberg {
             throw new FriedbergCommandException(
                     String.format("expected taskIndex to be in range of %d items", this.tasks.size()), "markCommand");
         }
-        ;
         if (command.equals("mark")) {
             this.markTask(taskIndex);
         } else if (command.equals("unmark")) {
@@ -197,5 +198,27 @@ public class Friedberg {
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
         System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
+    }
+
+    public void deleteCommand(String userInput) throws FriedbergException {
+        String userInputTaskIndex = userInput.replace("delete ", "");
+        try {
+            int taskIndex = Integer.parseInt(userInputTaskIndex) - 1;
+            if (!this.checkValidTaskIndex(taskIndex)) {
+                throw new FriedbergCommandException(
+                        String.format("expected taskIndex to be in range of %d items", this.tasks.size()),
+                        "delete");
+            }
+            Task removedTask = this.tasks.remove(taskIndex);
+            System.out.println("Noted. I've removed this task:");
+            System.out.println(removedTask.renderTask());
+            System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
+
+        } catch (FriedbergException e){
+            throw e;
+        } catch (Exception e) {
+            throw new FriedbergCommandException(String.format("Unkown delete command|userInput: %s", userInput),
+                    "delete");
+        }
     }
 }
