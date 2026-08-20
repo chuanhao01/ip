@@ -48,7 +48,7 @@ public class Friedberg {
                     System.out.println(String.format("%d. %s", i + 1, this.items[i]));
                 }
             } else {
-                echo(userInput);
+                addToList(userInput);
             }
             System.out.println("____________________________________________________________");
             System.out.println();
@@ -56,9 +56,9 @@ public class Friedberg {
         stdin.close();
     }
 
-    public void echo(String userInput) {
+    public void addToList(String userInput) {
         this.items[this.totalNumOfItems] = userInput;
         this.totalNumOfItems += 1;
-        System.out.println(userInput);
+        System.out.println(String.format("added: %s", userInput));
     }
 }
