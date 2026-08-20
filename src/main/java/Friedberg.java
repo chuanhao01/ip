@@ -1,5 +1,9 @@
 import java.util.Scanner;
 
+import exception.FriedbergCommandException;
+import exception.FriedbergException;
+import exception.FriedbergUserInputException;
+
 public class Friedberg {
     private static final String name = "Friedberg";
     private Task[] tasks;
@@ -53,10 +57,17 @@ public class Friedberg {
             } else if (command.equals("list")) {
                 this.listTasks();
             } else {
-                if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
-                    this.markCommand(userInput);
-                } else {
-                    this.addTaskCommand(userInput);
+                try {
+                    if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
+                        this.markCommand(userInput);
+                    } else if (userInput.startsWith("deadline") || userInput.startsWith("todo")
+                            || userInput.startsWith("event")) {
+                        this.addTaskCommand(userInput);
+                    } else {
+                        throw new FriedbergCommandException("Unknown command given by user", userInput);
+                    }
+                } catch (FriedbergException e) {
+                    System.out.println(String.format("User Error using Friedberg: %s", e.getMessage()));
                 }
             }
             System.out.println("____________________________________________________________");
@@ -65,22 +76,26 @@ public class Friedberg {
         stdin.close();
     }
 
-    public void markCommand(String userInput) {
+    public void markCommand(String userInput) throws FriedbergException {
         String[] words = userInput.split("\\s+");
         if (words.length != 2) {
-            System.out.println("Unable to mark this task");
-            return;
+            throw new FriedbergCommandException(String.format("Unknown mark command given|bad mark input: %s", userInput),
+                    "markCommand");
         }
         String command = words[0];
         int taskIndex = Integer.parseInt(words[1]) - 1;
         if (!this.checkValidTaskIndex(taskIndex)) {
-            System.out.println("Unable to mark this task");
-            return;
+            throw new FriedbergCommandException(
+                    String.format("expected taskIndex to be in range of %d items", this.totalNumOfTasks), "markCommand");
         }
+        ;
         if (command.equals("mark")) {
             this.markTask(taskIndex);
         } else if (command.equals("unmark")) {
             this.unmarkTask(taskIndex);
+        } else {
+            throw new FriedbergCommandException(String.format("Unknown mark command given|command: %s", command),
+                    "markCommand");
         }
     }
 
@@ -104,7 +119,7 @@ public class Friedberg {
      * @param taskIndex task 0-index to check
      */
     private boolean checkValidTaskIndex(int taskIndex) {
-        return taskIndex < this.totalNumOfTasks;
+        return 0 <= taskIndex && taskIndex < this.totalNumOfTasks;
     }
 
     public void listTasks() {
@@ -114,13 +129,12 @@ public class Friedberg {
         }
     }
 
-    public Task createDeadline(String userInput){
+    public Task createDeadline(String userInput) throws FriedbergUserInputException {
         userInput = userInput.replace("deadline ", "");
         String[] words = userInput.split("/by ");
         // For later error level
-        if (words.length != 2){
-            System.out.println("Error adding deadline");
-            return null;
+        if (words.length != 2) {
+            throw new FriedbergUserInputException("deadline task expected to have /by");
         }
         String taskName = words[0].strip();
         String byDatetime = words[1].strip();
@@ -130,26 +144,27 @@ public class Friedberg {
         return task;
     }
 
-    public Task createTodo(String userInput){
-        userInput = userInput.replace("todo  ", "");
+    public Task createTodo(String userInput) {
+        userInput = userInput.replace("todo ", "");
         String taskName = userInput.strip();
         Task task = new ToDo(taskName);
         this.tasks[this.totalNumOfTasks] = task;
         this.totalNumOfTasks += 1;
         return task;
     }
-    public Task createEvent(String userInput){
-        userInput = userInput.replace("event  ", "");
+
+    public Task createEvent(String userInput) throws FriedbergUserInputException {
+        userInput = userInput.replace("event ", "");
         String[] words = userInput.split("/from ");
-        if (words.length != 2){
+        if (words.length != 2) {
             System.out.println("Error adding event");
-            return null;
+            throw new FriedbergUserInputException("event task expected to have /from");
         }
         String taskName = words[0].strip();
         words = words[1].split("/to ");
-        if (words.length != 2){
+        if (words.length != 2) {
             System.out.println("Error adding event");
-            return null;
+            throw new FriedbergUserInputException("event task expected to have /to");
         }
         String fromDatetime = words[0].strip();
         String toDatetime = words[1].strip();
@@ -159,23 +174,23 @@ public class Friedberg {
         return task;
     }
 
-    public void addTaskCommand(String userInput) {
+    public void addTaskCommand(String userInput) throws FriedbergException {
         String[] words = userInput.split(" ");
         String command = words[0];
         Task task;
-        if (command.equals("deadline")){
-            task = this.createDeadline(userInput);
-        } else if (command.equals("todo")){
-            task = this.createTodo(userInput);
-        } else if (command.equals("event")){
-            task = this.createEvent(userInput);
-        } else {
-            System.out.println("Error adding task");
-            return;
-        }
-        if (task == null){
-            System.out.println("Error adding task");
-            return;
+        try {
+            if (command.equals("deadline")) {
+                task = this.createDeadline(userInput);
+            } else if (command.equals("todo")) {
+                task = this.createTodo(userInput);
+            } else if (command.equals("event")) {
+                task = this.createEvent(userInput);
+            } else {
+                throw new FriedbergCommandException(String.format("Unknown task type given|task: %s", command),
+                        "addTask");
+            }
+        } catch (FriedbergException e) {
+            throw e;
         }
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
