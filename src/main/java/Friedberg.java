@@ -7,13 +7,20 @@ public class Friedberg {
 
     public static void main(String[] args) {
         Friedberg chatbot = new Friedberg();
-        chatbot.greet();
-        chatbot.command();
+        chatbot.run();
     }
 
     public Friedberg() {
         this.tasks = new Task[100];
         this.totalNumOfItems = 0;
+    }
+
+    /**
+     * Runs the chatbot Friedberg
+     */
+    public void run(){
+        this.greet();
+        this.command();
     }
 
     public void greet() {
