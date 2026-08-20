@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import exception.FriedbergCommandException;
@@ -6,8 +8,7 @@ import exception.FriedbergUserInputException;
 
 public class Friedberg {
     private static final String name = "Friedberg";
-    private Task[] tasks;
-    private int totalNumOfTasks;
+    private List<Task> tasks;
 
     public static void main(String[] args) {
         Friedberg chatbot = new Friedberg();
@@ -15,8 +16,7 @@ public class Friedberg {
     }
 
     public Friedberg() {
-        this.tasks = new Task[100];
-        this.totalNumOfTasks = 0;
+        this.tasks = new ArrayList<Task>();
     }
 
     /**
@@ -83,14 +83,15 @@ public class Friedberg {
     public void markCommand(String userInput) throws FriedbergException {
         String[] words = userInput.split("\\s+");
         if (words.length != 2) {
-            throw new FriedbergCommandException(String.format("Unknown mark command given|bad mark input: %s", userInput),
+            throw new FriedbergCommandException(
+                    String.format("Unknown mark command given|bad mark input: %s", userInput),
                     "markCommand");
         }
         String command = words[0];
         int taskIndex = Integer.parseInt(words[1]) - 1;
         if (!this.checkValidTaskIndex(taskIndex)) {
             throw new FriedbergCommandException(
-                    String.format("expected taskIndex to be in range of %d items", this.totalNumOfTasks), "markCommand");
+                    String.format("expected taskIndex to be in range of %d items", this.tasks.size()), "markCommand");
         }
         ;
         if (command.equals("mark")) {
@@ -104,14 +105,14 @@ public class Friedberg {
     }
 
     public void markTask(int taskIndex) {
-        Task task = this.tasks[taskIndex];
+        Task task = this.tasks.get(taskIndex);
         task.mark();
         System.out.println("Nice! I've marked this task as done:");
         System.out.println(task.renderTask());
     }
 
     public void unmarkTask(int taskIndex) {
-        Task task = this.tasks[taskIndex];
+        Task task = this.tasks.get(taskIndex);
         task.unmark();
         System.out.println("OK, I've marked this task as not done yet:");
         System.out.println(task.renderTask());
@@ -123,13 +124,13 @@ public class Friedberg {
      * @param taskIndex task 0-index to check
      */
     private boolean checkValidTaskIndex(int taskIndex) {
-        return 0 <= taskIndex && taskIndex < this.totalNumOfTasks;
+        return 0 <= taskIndex && taskIndex < this.tasks.size();
     }
 
     public void listTasks() {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < this.totalNumOfTasks; i++) {
-            System.out.println(String.format("%d. %s", i + 1, this.tasks[i].renderTask()));
+        for (int i = 0; i < this.tasks.size(); i++) {
+            System.out.println(String.format("%d. %s", i + 1, this.tasks.get(i).renderTask()));
         }
     }
 
@@ -143,8 +144,7 @@ public class Friedberg {
         String taskName = words[0].strip();
         String byDatetime = words[1].strip();
         Task task = new Deadline(taskName, byDatetime);
-        this.tasks[this.totalNumOfTasks] = task;
-        this.totalNumOfTasks += 1;
+        this.tasks.add(task);
         return task;
     }
 
@@ -152,8 +152,7 @@ public class Friedberg {
         userInput = userInput.replace("todo ", "");
         String taskName = userInput.strip();
         Task task = new ToDo(taskName);
-        this.tasks[this.totalNumOfTasks] = task;
-        this.totalNumOfTasks += 1;
+        this.tasks.add(task);
         return task;
     }
 
@@ -173,8 +172,7 @@ public class Friedberg {
         String fromDatetime = words[0].strip();
         String toDatetime = words[1].strip();
         Task task = new Event(taskName, fromDatetime, toDatetime);
-        this.tasks[this.totalNumOfTasks] = task;
-        this.totalNumOfTasks += 1;
+        this.tasks.add(task);
         return task;
     }
 
@@ -198,6 +196,6 @@ public class Friedberg {
         }
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
-        System.out.println(String.format("Now you have %d tasks in the list.", this.totalNumOfTasks));
+        System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
     }
 }
