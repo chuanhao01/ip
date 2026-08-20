@@ -8,8 +8,18 @@ public class Task {
         this.status = false;
     }
 
-    public void flipStatus() {
-        this.status = !this.status;
+    /**
+     * Marks the Task as done
+     */
+    public void mark() {
+        this.status = true;
+    }
+
+    /**
+     * Unmarks the Task
+     */
+    public void unmark(){
+        this.status = false;
     }
 
     /**
