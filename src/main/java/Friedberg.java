@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Friedberg {
     private static final String name = "Friedberg";
-    private String[] items;
+    private Task[] tasks;
     private int totalNumOfItems;
 
     public static void main(String[] args) {
@@ -12,7 +12,7 @@ public class Friedberg {
     }
 
     public Friedberg() {
-        this.items = new String[100];
+        this.tasks = new Task[100];
         this.totalNumOfItems = 0;
     }
 
@@ -44,11 +44,9 @@ public class Friedberg {
                 System.out.println("Bye bye, see you again next time.");
                 isBye = true;
             } else if (command.equals("list")) {
-                for (int i = 0; i < this.totalNumOfItems; i++) {
-                    System.out.println(String.format("%d. %s", i + 1, this.items[i]));
-                }
+                this.listTasks();
             } else {
-                addToList(userInput);
+                this.addTask(userInput);
             }
             System.out.println("____________________________________________________________");
             System.out.println();
@@ -56,9 +54,17 @@ public class Friedberg {
         stdin.close();
     }
 
-    public void addToList(String userInput) {
-        this.items[this.totalNumOfItems] = userInput;
+    public void listTasks() {
+        System.out.println("Here are the tasks in your list:");
+        for (int i = 0; i < this.totalNumOfItems; i++) {
+            System.out.println(String.format("%d. %s", i + 1, this.tasks[i].renderTask()));
+        }
+    }
+
+    public void addTask(String userInput) {
+        Task task = new Task(userInput);
+        this.tasks[this.totalNumOfItems] = task;
         this.totalNumOfItems += 1;
-        System.out.println(String.format("added: %s", userInput));
+        System.out.println(String.format("added: %s", task.renderTask()));
     }
 }
