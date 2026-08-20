@@ -51,24 +51,28 @@ public class Friedberg {
             userInput = userInput.strip();
             String command = userInput;
             System.out.println("____________________________________________________________");
-            if (command.equals("bye")) {
-                System.out.println("Bye bye, see you again next time.");
-                isBye = true;
-            } else if (command.equals("list")) {
-                this.listTasks();
-            } else {
-                try {
-                    if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
-                        this.markCommand(userInput);
-                    } else if (userInput.startsWith("deadline") || userInput.startsWith("todo")
-                            || userInput.startsWith("event")) {
-                        this.addTaskCommand(userInput);
-                    } else {
-                        throw new FriedbergCommandException("Unknown command given by user", userInput);
+            try {
+                if (command.equals("bye")) {
+                    System.out.println("Bye bye, see you again next time.");
+                    isBye = true;
+                } else if (command.equals("list")) {
+                    this.listTasks();
+                } else {
+                    try {
+                        if (userInput.startsWith("mark") || userInput.startsWith("unmark")) {
+                            this.markCommand(userInput);
+                        } else if (userInput.startsWith("deadline") || userInput.startsWith("todo")
+                                || userInput.startsWith("event")) {
+                            this.addTaskCommand(userInput);
+                        } else {
+                            throw new FriedbergCommandException("Unknown command given by user", userInput);
+                        }
+                    } catch (FriedbergException e) {
+                        System.out.println(String.format("User Error using Friedberg: %s", e.getMessage()));
                     }
-                } catch (FriedbergException e) {
-                    System.out.println(String.format("User Error using Friedberg: %s", e.getMessage()));
                 }
+            } catch (Exception e) {
+                System.out.println(String.format("Unknown Exception|exception: %s", e.getMessage()));
             }
             System.out.println("____________________________________________________________");
             System.out.println();
