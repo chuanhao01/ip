@@ -5,6 +5,10 @@ import java.util.Scanner;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 import exception.FriedbergUserInputException;
+import task.Deadline;
+import task.Event;
+import task.Task;
+import task.ToDo;
 
 public class Friedberg {
     private static final String name = "Friedberg";

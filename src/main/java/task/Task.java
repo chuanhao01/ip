@@ -1,3 +1,4 @@
+package task;
 public abstract class Task {
     private String name;
     // True is done, false is not done
