@@ -11,4 +11,9 @@ public class Event extends Task{
     public String renderTask() {
         return String.format("[E]%s (from: %s to: %s)", super.renderTask(), this.fromDatetime, this.toDatetime);
     }
+
+    @Override
+    public String serialize() {
+        return String.format("E,%s,%s,", null)
+    }
 }

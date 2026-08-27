@@ -17,12 +17,56 @@ public abstract class Task {
                 throw new RuntimeException("Unknown Task Status should not be possible");
             }
         }
+
+        public String serialize(){
+            if(this == IN_PROGRESS){
+                return "P";
+            } else if(this == DONE){
+                return "D";
+            } else {
+                throw new RuntimeException("Unknown Task Status should not be possible");
+            }
+        }
+        public TaskStatus deserialize(String taskStatusString){
+            if (taskStatusString == "P"){
+                return IN_PROGRESS;
+            } else if(taskStatusString == "D"){
+                return DONE;
+            } else {
+                throw new RuntimeException("Unknown Task Status should not be possible");
+            }
+        }
     }
 
     public Task(String name) {
         this.name = name;
         this.status = TaskStatus.IN_PROGRESS;
     }
+    /**
+     * Alternative initializer for Task when name and status is known
+     * @param name
+     * @param status
+     */
+    public Task(String name, TaskStatus status){
+        this.name = name;
+        this.status = status;
+    }
+
+    // Getters
+    public String getName(){
+        return this.name;
+    }
+    public TaskStatus getStatus(){
+        return this.status;
+    }
+
+    public String serialize(){
+        // name,status
+        return String.format("%s,%s", this.name, this.status);
+    };
+    public static Task deserialize(String taskString){
+        return new ToDo("test");
+    };
 
     /**
      * Marks the Task as done
