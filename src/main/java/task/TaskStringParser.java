@@ -1,10 +1,9 @@
 package task;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import exception.FriedbergInternalException;
+import exception.FriedbergException;
 
 /**
  * Responsible for converting a given list of Tasks into a serializable string
@@ -27,7 +26,7 @@ public class TaskStringParser {
      * @param dataString String as formatted by the serializeTasks funciton call
      * @return ArrayList of the original serialized Tasks
      */
-    public static ArrayList<Task> deserializeTasks(String dataString) throws FriedbergInternalException {
+    public static ArrayList<Task> deserializeTasks(String dataString) throws FriedbergException {
         ArrayList<Task> tasks = new ArrayList<Task>();
         String[] taskStrings = dataString.equals("") ? new String[0] : dataString.split("\n");
         for (String taskString : taskStrings) {
