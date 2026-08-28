@@ -24,10 +24,10 @@ public enum TaskStatus {
         }
     }
 
-    public TaskStatus deserialize(String taskStatusString) {
-        if (taskStatusString == "P") {
+    public static TaskStatus deserialize(String taskStatusString) {
+        if (taskStatusString.equals("P")) {
             return IN_PROGRESS;
-        } else if (taskStatusString == "D") {
+        } else if (taskStatusString.equals("D")) {
             return DONE;
         } else {
             throw new RuntimeException("Unknown Task Status should not be possible");

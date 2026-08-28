@@ -9,6 +9,7 @@ import exception.FriedbergUserInputException;
 import task.Deadline;
 import task.Event;
 import task.Task;
+import task.TaskStringParser;
 import task.ToDo;
 
 public class Friedberg {
@@ -32,6 +33,7 @@ public class Friedberg {
         } catch (Exception e) {
             throw new FriedbergInternalException(e.getMessage());
         }
+        this.loadTasksFromData();
     }
 
     /**
@@ -118,6 +120,7 @@ public class Friedberg {
             throw new FriedbergCommandException(String.format("Unknown mark command given|command: %s", command),
                     "markCommand");
         }
+        this.saveTasksToData();
     }
 
     public void markTask(int taskIndex) {
@@ -210,6 +213,7 @@ public class Friedberg {
         } catch (FriedbergException e) {
             throw e;
         }
+        this.saveTasksToData();
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
         System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
@@ -234,6 +238,26 @@ public class Friedberg {
         } catch (Exception e) {
             throw new FriedbergCommandException(String.format("Unkown delete command|userInput: %s", userInput),
                     "delete");
+        }
+    }
+
+    public void loadTasksFromData() throws FriedbergInternalException {
+        String tasksDataString;
+        try {
+
+            tasksDataString = this.dataHandler.read();
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to load data, e: %s", e.getMessage()));
+        }
+        this.tasks = TaskStringParser.deserializeTasks(tasksDataString);
+    }
+
+    public void saveTasksToData() throws FriedbergInternalException {
+        String tasksDataString = TaskStringParser.serializeTasks(this.tasks);
+        try {
+            this.dataHandler.write(tasksDataString);
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to save data, e: %s", e.getMessage()));
         }
     }
 }

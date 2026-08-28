@@ -25,7 +25,7 @@ public class DataHandler {
      * @throws Exception Any internal exceptions
      */
     public String read() throws Exception {
-        return Files.readString(this.dataFilePath);
+        return Files.readString(this.dataFilePath).strip();
     }
 
     /**
@@ -36,7 +36,7 @@ public class DataHandler {
      */
 
     public void write(String data) throws Exception {
-        Files.writeString(this.dataFilePath, data);
+        Files.writeString(this.dataFilePath, data.strip());
     }
 
 }
