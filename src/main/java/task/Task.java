@@ -2,6 +2,7 @@ package task;
 
 import java.util.Arrays;
 
+import exception.FriedbergException;
 import exception.FriedbergInternalException;
 
 public abstract class Task {
@@ -39,7 +40,7 @@ public abstract class Task {
         return String.format("%s,%s", this.name, this.status.serialize());
     };
 
-    public static Task deserialize(String taskString) throws FriedbergInternalException {
+    public static Task deserialize(String taskString) throws FriedbergException {
         // csv format from the way a Task is serialize
         String[] tokens = taskString.split(",");
         if (tokens.length < 2) {

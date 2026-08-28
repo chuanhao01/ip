@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import common.Constants;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 import exception.FriedbergInternalException;
@@ -153,7 +154,7 @@ public class Friedberg {
         }
     }
 
-    public Task createDeadline(String userInput) throws FriedbergUserInputException {
+    public Task createDeadline(String userInput) throws FriedbergException {
         userInput = userInput.replace("deadline ", "");
         String[] words = userInput.split("/by ");
         // For later error level
@@ -175,7 +176,7 @@ public class Friedberg {
         return task;
     }
 
-    public Task createEvent(String userInput) throws FriedbergUserInputException {
+    public Task createEvent(String userInput) throws FriedbergException {
         userInput = userInput.replace("event ", "");
         String[] words = userInput.split("/from ");
         if (words.length != 2) {
@@ -241,7 +242,7 @@ public class Friedberg {
         }
     }
 
-    public void loadTasksFromData() throws FriedbergInternalException {
+    public void loadTasksFromData() throws FriedbergException {
         String tasksDataString;
         try {
 
