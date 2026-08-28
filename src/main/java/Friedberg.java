@@ -4,19 +4,36 @@ import java.util.Scanner;
 
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
+import exception.FriedbergInternalException;
 import exception.FriedbergUserInputException;
+import task.Deadline;
+import task.Event;
+import task.Task;
+import task.TaskStringParser;
+import task.ToDo;
 
 public class Friedberg {
     private static final String name = "Friedberg";
     private List<Task> tasks;
+    private DataHandler dataHandler;
 
     public static void main(String[] args) {
-        Friedberg chatbot = new Friedberg();
-        chatbot.run();
+        try {
+            Friedberg chatbot = new Friedberg();
+            chatbot.run();
+        } catch (FriedbergException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
-    public Friedberg() {
+    public Friedberg() throws FriedbergException {
         this.tasks = new ArrayList<Task>();
+        try {
+            this.dataHandler = new DataHandler(Constants.PROJECT_DATA_DIR_PATH, Constants.FRIEDBERG_DATA_FILE_PATH);
+        } catch (Exception e) {
+            throw new FriedbergInternalException(e.getMessage());
+        }
+        this.loadTasksFromData();
     }
 
     /**
@@ -103,6 +120,7 @@ public class Friedberg {
             throw new FriedbergCommandException(String.format("Unknown mark command given|command: %s", command),
                     "markCommand");
         }
+        this.saveTasksToData();
     }
 
     public void markTask(int taskIndex) {
@@ -195,6 +213,7 @@ public class Friedberg {
         } catch (FriedbergException e) {
             throw e;
         }
+        this.saveTasksToData();
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
         System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
@@ -214,11 +233,31 @@ public class Friedberg {
             System.out.println(removedTask.renderTask());
             System.out.println(String.format("Now you have %d tasks in the list.", this.tasks.size()));
 
-        } catch (FriedbergException e){
+        } catch (FriedbergException e) {
             throw e;
         } catch (Exception e) {
             throw new FriedbergCommandException(String.format("Unkown delete command|userInput: %s", userInput),
                     "delete");
+        }
+    }
+
+    public void loadTasksFromData() throws FriedbergInternalException {
+        String tasksDataString;
+        try {
+
+            tasksDataString = this.dataHandler.read();
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to load data, e: %s", e.getMessage()));
+        }
+        this.tasks = TaskStringParser.deserializeTasks(tasksDataString);
+    }
+
+    public void saveTasksToData() throws FriedbergInternalException {
+        String tasksDataString = TaskStringParser.serializeTasks(this.tasks);
+        try {
+            this.dataHandler.write(tasksDataString);
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to save data, e: %s", e.getMessage()));
         }
     }
 }
