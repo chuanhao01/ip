@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import common.Constants;
 import exception.FriedbergCommandException;
@@ -84,6 +85,8 @@ public class Friedberg {
                             this.addTaskCommand(userInput);
                         } else if (userInput.startsWith("delete")) {
                             this.deleteCommand(userInput);
+                        } else if (userInput.startsWith("find")) {
+                            this.findCommand(userInput);
                         } else {
                             throw new FriedbergCommandException("Unknown command given by user", userInput);
                         }
@@ -259,6 +262,20 @@ public class Friedberg {
             this.dataHandler.write(tasksDataString);
         } catch (Exception e) {
             throw new FriedbergInternalException(String.format("Unable to save data, e: %s", e.getMessage()));
+        }
+    }
+
+    public void findCommand(String userInput) {
+        String taskFilter = userInput.replace("find ", "");
+        List<Task> filteredTasks = this.tasks.stream().filter(task -> task.getName().contains(taskFilter))
+                .collect(Collectors.toList());
+        if (filteredTasks.size() == 0) {
+            System.out.println("There are no tasks matching your search.");
+        } else {
+            System.out.println("Here are the matching tasks in your list:");
+            for (Task task : filteredTasks) {
+                System.out.println(task.renderTask());
+            }
         }
     }
 }
