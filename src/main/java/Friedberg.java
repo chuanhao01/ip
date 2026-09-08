@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import common.Constants;
+import datahandler.DataHandler;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 import exception.FriedbergInternalException;
