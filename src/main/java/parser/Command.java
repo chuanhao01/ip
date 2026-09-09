@@ -4,21 +4,26 @@ import exception.FriedbergException;
 
 public interface Command {
     /**
-     * Given the user input, return true if the command is the one it should run
-     * @param userInput
-     * @return
+     * Checks whether this command can handle the given user input.
+     *
+     * @param userInput input entered by the user
+     * @return true if this command should handle the input
      */
     boolean isCommand(String userInput);
 
     /**
-     * Executes the command, calling further follow up actions on the commandContext if needed
-     * @param commandContext
+     * Executes the command, calling follow-up actions on the command context if needed.
+     *
+     * @param userInput input entered by the user
+     * @param commandContext context containing task and storage operations
+     * @throws FriedbergException if the command cannot be executed
      */
     void execute(String userInput, CommandContext commandContext) throws FriedbergException;
 
     /**
-     * Needed to indicate that the bye command ran to exit the chatbot
-     * @return
+     * Checks whether this command exits the chatbot.
+     *
+     * @return true if this command exits the chatbot
      */
     boolean isBye();
 }

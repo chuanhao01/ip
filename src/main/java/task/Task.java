@@ -38,13 +38,13 @@ public abstract class Task {
     public String serialize() {
         // name,status
         return String.format("%s,%s", this.name, this.status.serialize());
-    };
+    }
 
     public static Task deserialize(String taskString) throws FriedbergException {
         // csv format from the way a Task is serialize
         String[] tokens = taskString.split(",");
         if (tokens.length < 2) {
-            throw new FriedbergInternalException("Expected deserialize task to have atleast 2 tokens");
+            throw new FriedbergInternalException("Expected deserialize task to have at least 2 tokens");
         }
         String name = tokens[0];
         TaskStatus status = TaskStatus.deserialize(tokens[1]);
@@ -59,7 +59,7 @@ public abstract class Task {
         } else {
             throw new FriedbergInternalException(String.format("Unknown taskType: %s", taskType));
         }
-    };
+    }
 
     /**
      * Marks the Task as done

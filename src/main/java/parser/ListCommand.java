@@ -1,6 +1,6 @@
 package parser;
 
-public class ListCommand implements Command{
+public class ListCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.equals("list");

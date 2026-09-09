@@ -6,7 +6,7 @@ import exception.FriedbergUserInputException;
 import task.Deadline;
 import task.Task;
 
-public class DeadlineCommand implements Command{
+public class DeadlineCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.startsWith("deadline");
@@ -30,7 +30,7 @@ public class DeadlineCommand implements Command{
         commandContext.addTask(task);
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
-        System.out.println(String.format("Now you have %d tasks in the list.", commandContext.getTasksSize()));
+        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
     }
 
     @Override

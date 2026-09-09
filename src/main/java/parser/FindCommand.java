@@ -15,7 +15,7 @@ public class FindCommand implements Command {
     public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String tasksNameFilter = userInput.replace("find ", "");
         List<Task> filteredTasks = commandContext.filterTasks(tasksNameFilter);
-        if (filteredTasks.size() == 0) {
+        if (filteredTasks.isEmpty()) {
             System.out.println("There are no tasks matching your search.");
         } else {
             System.out.println("Here are the matching tasks in your list:");

@@ -14,16 +14,16 @@ public class CommandParser {
         // Read
         new ListCommand(),
         new FindCommand(),
-        //Edit
+        // Edit
         new MarkCommand(),
         new UnMarkCommand(),
         // Delete
         new DeleteCommand()
     };
 
-    public static Command parse(String userInput) throws FriedbergException{
-        for(Command command : CommandParser.commands){
-            if (command.isCommand(userInput)){
+    public static Command parse(String userInput) throws FriedbergException {
+        for (Command command : CommandParser.commands) {
+            if (command.isCommand(userInput)) {
                 return command;
             }
         }
