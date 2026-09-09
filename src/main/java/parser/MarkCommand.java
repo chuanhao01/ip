@@ -3,7 +3,7 @@ package parser;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 
-public class MarkCommand implements Command{
+public class MarkCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.startsWith("mark");
@@ -17,7 +17,7 @@ public class MarkCommand implements Command{
                     String.format("Unknown mark command given|bad mark input: %s", userInput),
                     "mark");
         }
-        if(!words[0].equals("mark")){
+        if (!words[0].equals("mark")) {
             throw new FriedbergCommandException(String.format("Expected mark command but instead got|userInput: %s", userInput), "mark");
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;

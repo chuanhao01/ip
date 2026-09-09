@@ -3,7 +3,7 @@ package parser;
 import exception.FriedbergException;
 import task.Task;
 
-public class DeleteCommand implements Command{
+public class DeleteCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.startsWith("delete");
@@ -12,10 +12,10 @@ public class DeleteCommand implements Command{
     @Override
     public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
         int taskIndex = ParserUtil.parseInt(userInput.replace("delete ", "")) - 1;
-        Task removedTask = commandContext.removeTask(taskIndex) ;
+        Task removedTask = commandContext.removeTask(taskIndex);
         System.out.println("Noted. I've removed this task:");
         System.out.println(removedTask.renderTask());
-        System.out.println(String.format("Now you have %d tasks in the list.", commandContext.getTasksSize()));
+        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
     }
 
     @Override

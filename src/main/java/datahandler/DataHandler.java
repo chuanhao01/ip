@@ -1,10 +1,11 @@
 package datahandler;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class DataHandler {
-    private Path dataFolderPath;
-    private Path dataFilePath;
+    private final Path dataFolderPath;
+    private final Path dataFilePath;
 
     public DataHandler(Path dataFolderPath, Path dataFilePath) throws Exception {
         this.dataFolderPath = dataFolderPath;
@@ -21,21 +22,21 @@ public class DataHandler {
     }
 
     /**
-     * Reads the data file and returns the entire thing as a string
+     * Reads the data file and returns its contents as a string.
      *
-     * @throws Exception Any internal exceptions
+     * @return contents of the data file
+     * @throws Exception if the data cannot be read
      */
     public String read() throws Exception {
         return Files.readString(this.dataFilePath).strip();
     }
 
     /**
-     * Action to write the data into the data file
+     * Writes the given data into the data file.
      *
-     * @param data String we want to write into the data file
-     * @throws Exception
+     * @param data string to write into the data file
+     * @throws Exception if the data cannot be written
      */
-
     public void write(String data) throws Exception {
         Files.writeString(this.dataFilePath, data.strip());
     }

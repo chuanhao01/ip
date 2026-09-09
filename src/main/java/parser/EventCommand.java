@@ -6,7 +6,7 @@ import exception.FriedbergUserInputException;
 import task.Event;
 import task.Task;
 
-public class EventCommand implements Command{
+public class EventCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.startsWith("event");
@@ -36,7 +36,7 @@ public class EventCommand implements Command{
         commandContext.addTask(task);
         System.out.println("Got it. I've added this task:");
         System.out.println(task.renderTask());
-        System.out.println(String.format("Now you have %d tasks in the list.", commandContext.getTasksSize()));
+        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
     }
 
     @Override

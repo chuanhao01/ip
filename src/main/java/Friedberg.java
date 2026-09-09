@@ -5,7 +5,7 @@ import parser.CommandContext;
 import parser.CommandParser;
 
 public class Friedberg {
-    private static final String name = "Friedberg";
+    private static final String NAME = "Friedberg";
     private CommandContext commandContext;
 
     public static void main(String[] args) {
@@ -39,7 +39,7 @@ public class Friedberg {
                 + "                                        __/ |\n"
                 + "                                       |___/ \n";
         System.out.println(banner);
-        System.out.println(String.format("Hello! I'm %s.", Friedberg.name));
+        System.out.printf("Hello! I'm %s.%n", Friedberg.NAME);
         System.out.println("I am a chatbot beep boop, what can I do for you?");
         System.out.println("____________________________________________________________");
         System.out.println();
@@ -59,7 +59,7 @@ public class Friedberg {
                     break;
                 }
             } catch (FriedbergException e) {
-                System.out.println(String.format("User Error using Friedberg: %s", e.getMessage()));
+                System.out.printf("User Error using Friedberg: %s%n", e.getMessage());
             }
             System.out.println("____________________________________________________________");
             System.out.println();

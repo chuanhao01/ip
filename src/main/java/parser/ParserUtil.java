@@ -3,12 +3,16 @@ package parser;
 import exception.FriedbergUserInputException;
 
 public class ParserUtil {
+    private ParserUtil() {
+        // Prevent instantiation.
+    }
+
     /**
-     * Wrapper utility method to parse a string to an integer, help to wrap and
-     * return the correct FriedbergUserInputException
+     * Parses a string as an integer and wraps invalid input in a Friedberg user input exception.
      *
-     * @param str
-     * @return
+     * @param str string to parse
+     * @return parsed integer value
+     * @throws FriedbergUserInputException if the string is not a valid integer
      */
     public static int parseInt(String str) throws FriedbergUserInputException {
         try {

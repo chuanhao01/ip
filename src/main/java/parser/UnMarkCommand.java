@@ -3,7 +3,7 @@ package parser;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 
-public class UnMarkCommand implements Command{
+public class UnMarkCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
         return userInput.startsWith("unmark");
@@ -17,8 +17,7 @@ public class UnMarkCommand implements Command{
                     String.format("Unknown unmark command given|bad mark input: %s", userInput),
                     "unmark");
         }
-        if(!words[0].equals("unmark")
-        ){
+        if (!words[0].equals("unmark")) {
             throw new FriedbergCommandException(String.format("Expected unmark command but instead got|userInput: %s", userInput), "unmark");
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;

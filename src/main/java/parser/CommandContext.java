@@ -13,7 +13,7 @@ import task.TaskStringParser;
 
 public class CommandContext {
     private List<Task> tasks;
-    private DataHandler dataHandler;
+    private final DataHandler dataHandler;
 
     public CommandContext() throws FriedbergException {
         try {
@@ -25,28 +25,29 @@ public class CommandContext {
     }
 
     /**
-     * Getter for tasks.size()
+     * Returns the number of tasks in the current task list.
      *
-     * @return
+     * @return number of tasks in the current task list
      */
     public int getTasksSize() {
         return this.tasks.size();
     }
 
     /**
-     * Called to list all the current tasks
+     * Lists all current tasks.
      */
     public void listTasks() {
         System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < this.tasks.size(); i++) {
-            System.out.println(String.format("%d. %s", i + 1, this.tasks.get(i).renderTask()));
+            System.out.printf("%d. %s%n", i + 1, this.tasks.get(i).renderTask());
         }
     }
 
     /**
-     * Marks the given task index in tasks as done
+     * Marks the task at the given task index as done.
      *
-     * @param taskIndex
+     * @param taskIndex zero-based index of the task to mark
+     * @throws FriedbergException if the task index is invalid
      */
     public void markTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
@@ -54,31 +55,31 @@ public class CommandContext {
     }
 
     /**
-     * UnMarks the given task index in tasks as not done
+     * Unmarks the task at the given task index as not done.
      *
-     * @param taskIndex
+     * @param taskIndex zero-based index of the task to unmark
+     * @throws FriedbergException if the task index is invalid
      */
-    public void unmarkTask(int taskIndex) throws FriedbergException{
+    public void unmarkTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).unmark();
     }
 
     /**
-     * Returns the string to render the task for display
+     * Returns the string to render the task for display.
      *
-     * @param taskIndex
-     * @return
+     * @param taskIndex zero-based index of the task to render
+     * @return formatted task string for display
      */
     public String renderTask(int taskIndex) {
         return this.tasks.get(taskIndex).renderTask();
     }
 
     /**
-     * Filters the tasks by the given nameFilter and returns the list of tasks that
-     * matches
+     * Filters the tasks by the given name filter.
      *
-     * @param nameFilter
-     * @return
+     * @param nameFilter text that matching task names should contain
+     * @return list of tasks whose names contain the filter text
      */
     public List<Task> filterTasks(String nameFilter) {
         return this.tasks.stream().filter(task -> task.getName().contains(nameFilter))
@@ -86,9 +87,10 @@ public class CommandContext {
     }
 
     /**
-     * Adds a new task
+     * Adds a new task.
      *
-     * @param task
+     * @param task task to add
+     * @throws FriedbergException if the task cannot be saved
      */
     public void addTask(Task task) throws FriedbergException {
         this.tasks.add(task);
@@ -96,12 +98,13 @@ public class CommandContext {
     }
 
     /**
-     * Removes the task from tasks based on the given taskIndex
-     * @param taskIndex
+     * Removes the task at the given task index.
+     *
+     * @param taskIndex zero-based index of the task to remove
      * @return the task that was removed
-     * @throws FriedbergException
+     * @throws FriedbergException if the task index is invalid or the updated list cannot be saved
      */
-    public Task removeTask(int taskIndex) throws FriedbergException{
+    public Task removeTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         Task removedTask = this.tasks.remove(taskIndex);
         this.saveTasksToDataHandler();
@@ -116,14 +119,13 @@ public class CommandContext {
     }
 
     /**
-     * Loads the tasks from the given dataHandler
+     * Loads the tasks from the data handler.
      *
-     * @throws FriedbergException
+     * @throws FriedbergException if tasks cannot be loaded or deserialized
      */
     private void loadTasksFromDataHandler() throws FriedbergException {
         String tasksDataString;
         try {
-
             tasksDataString = this.dataHandler.read();
         } catch (Exception e) {
             throw new FriedbergInternalException(String.format("Unable to load data, e: %s", e.getMessage()));
@@ -132,9 +134,9 @@ public class CommandContext {
     }
 
     /**
-     * Saves the tasks to disk using the dataHandler
+     * Saves the tasks to disk using the data handler.
      *
-     * @throws FriedbergInternalException
+     * @throws FriedbergInternalException if tasks cannot be saved
      */
     private void saveTasksToDataHandler() throws FriedbergInternalException {
         String tasksDataString = TaskStringParser.serializeTasks(this.tasks);

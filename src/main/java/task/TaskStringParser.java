@@ -6,24 +6,26 @@ import java.util.List;
 import exception.FriedbergException;
 
 /**
- * Responsible for converting a given list of Tasks into a serializable string
- * Will also be able to convert a string into a list of Tasks
+ * Responsible for converting a given list of Tasks into a serializable string.
+ * Will also be able to convert a string into a list of Tasks.
  */
 public class TaskStringParser {
+    private TaskStringParser() {
+        // Prevent instantiation.
+    }
+
     public static String serializeTasks(List<Task> tasks) {
-        String data = "";
+        StringBuilder data = new StringBuilder();
         for (Task task : tasks) {
-            data += task.serialize();
-            data += "\n";
+            data.append(task.serialize()).append("\n");
         }
-        return data;
+        return data.toString();
     }
 
     /**
-     * Deserializes the output from a serializeTasks call back into an
-     * ArrayList<Task>
+     * Deserializes the output from a serializeTasks call back into an ArrayList of tasks.
      *
-     * @param dataString String as formatted by the serializeTasks funciton call
+     * @param dataString String as formatted by the serializeTasks function call
      * @return ArrayList of the original serialized Tasks
      */
     public static ArrayList<Task> deserializeTasks(String dataString) throws FriedbergException {
