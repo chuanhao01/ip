@@ -12,7 +12,7 @@ public class ByeCommand implements Command {
     }
 
     @Override
-    public void execute(CommandContext commandContext) {
+    public void execute(String userInput, CommandContext commandContext) {
         System.out.println("Bye bye, see you again next time.");
     }
 }

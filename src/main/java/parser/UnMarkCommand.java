@@ -3,10 +3,10 @@ package parser;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 
-public class MarkCommand implements Command{
+public class UnMarkCommand implements Command{
     @Override
     public boolean isCommand(String userInput) {
-        return userInput.startsWith("mark");
+        return userInput.startsWith("unmark");
     }
 
     @Override
@@ -14,15 +14,16 @@ public class MarkCommand implements Command{
         String[] words = userInput.split("\\s+");
         if (words.length != 2) {
             throw new FriedbergCommandException(
-                    String.format("Unknown mark command given|bad mark input: %s", userInput),
-                    "mark");
+                    String.format("Unknown unmark command given|bad mark input: %s", userInput),
+                    "unmark");
         }
-        if(!words[0].equals("mark")){
-            throw new FriedbergCommandException(String.format("Expected mark command but instead got|userInput: %s", userInput), "mark");
+        if(!words[0].equals("unmark")
+        ){
+            throw new FriedbergCommandException(String.format("Expected unmark command but instead got|userInput: %s", userInput), "unmark");
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;
-        commandContext.markTask(taskIndex);
-        System.out.println("Nice! I've marked this task as done:");
+        commandContext.unmarkTask(taskIndex);
+        System.out.println("OK, I've marked this task as not done yet:");
         System.out.println(commandContext.renderTask(taskIndex));
     }
 

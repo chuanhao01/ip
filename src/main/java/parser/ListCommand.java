@@ -7,7 +7,7 @@ public class ListCommand implements Command{
     }
 
     @Override
-    public void execute(CommandContext commandContext) {
+    public void execute(String userInput, CommandContext commandContext) {
         commandContext.listTasks();
     }
 
