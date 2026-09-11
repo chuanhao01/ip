@@ -5,6 +5,10 @@ import exception.FriedbergException;
 import task.Task;
 import task.ToDo;
 
+/**
+ * Handles the 'todo' command for Friedberg
+ * TO add a todo to the list of tasks
+ */
 public class TodoCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {

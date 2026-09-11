@@ -3,6 +3,9 @@ package common;
 import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Common Constants used throughout the project
+ */
 public final class Constants {
     public static final Path PROJECT_DATA_DIR_PATH = Path.of("data");
     public static final Path FRIEDBERG_DATA_FILE_PATH = PROJECT_DATA_DIR_PATH.resolve("friedberg_data");

@@ -3,6 +3,10 @@ package parser;
 import exception.FriedbergCommandException;
 import exception.FriedbergException;
 
+/**
+ * Handles the 'unmark' command for Friedberg.
+ * Marks a task as not done.
+ */
 public class UnMarkCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
@@ -18,7 +22,9 @@ public class UnMarkCommand implements Command {
                     "unmark");
         }
         if (!words[0].equals("unmark")) {
-            throw new FriedbergCommandException(String.format("Expected unmark command but instead got|userInput: %s", userInput), "unmark");
+            throw new FriedbergCommandException(
+                    String.format("Expected unmark command but instead got|userInput: %s", userInput),
+                    "unmark");
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;
         commandContext.unmarkTask(taskIndex);

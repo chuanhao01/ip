@@ -3,6 +3,10 @@ package parser;
 import exception.FriedbergException;
 import task.Task;
 
+/**
+ * Handles the 'delete' command for Friedberg.
+ * Removes a task from the task list.
+ */
 public class DeleteCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {

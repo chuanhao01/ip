@@ -2,6 +2,9 @@ package parser;
 
 import exception.FriedbergException;
 
+/**
+ * Common interface to be implemented by all commands used in Friedberg
+ */
 public interface Command {
     /**
      * Checks whether this command can handle the given user input.

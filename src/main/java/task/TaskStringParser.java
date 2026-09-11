@@ -14,6 +14,12 @@ public class TaskStringParser {
         // Prevent instantiation.
     }
 
+    /**
+     * Serializes the given tasks into the application's storage format.
+     *
+     * @param tasks tasks to serialize
+     * @return serialized tasks separated by line breaks
+     */
     public static String serializeTasks(List<Task> tasks) {
         StringBuilder data = new StringBuilder();
         for (Task task : tasks) {

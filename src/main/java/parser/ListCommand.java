@@ -1,5 +1,9 @@
 package parser;
 
+/**
+ * Handles the 'list' command for Friedberg.
+ * Displays all tasks in the task list.
+ */
 public class ListCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {

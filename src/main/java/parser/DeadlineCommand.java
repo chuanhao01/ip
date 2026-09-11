@@ -6,6 +6,10 @@ import exception.FriedbergUserInputException;
 import task.Deadline;
 import task.Task;
 
+/**
+ * Handles the 'deadline' command for Friedberg.
+ * Adds a deadline to the list of tasks.
+ */
 public class DeadlineCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
