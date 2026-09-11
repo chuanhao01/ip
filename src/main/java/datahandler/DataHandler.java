@@ -3,10 +3,20 @@ package datahandler;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Abstraction to handle data side effects
+ */
 public class DataHandler {
     private final Path dataFolderPath;
     private final Path dataFilePath;
 
+    /**
+     * Initalize Datahandler with the given dataFolderPath and dataFilePath
+     *
+     * @param dataFolderPath Folder where the data will be held
+     * @param dataFilePath File where the data should be saved to
+     * @throws Exception
+     */
     public DataHandler(Path dataFolderPath, Path dataFilePath) throws Exception {
         this.dataFolderPath = dataFolderPath;
         this.dataFilePath = dataFilePath;

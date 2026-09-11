@@ -2,13 +2,17 @@ package parser;
 
 import exception.FriedbergUserInputException;
 
+/**
+ * For shared methods used by the different commands
+ */
 public class ParserUtil {
     private ParserUtil() {
         // Prevent instantiation.
     }
 
     /**
-     * Parses a string as an integer and wraps invalid input in a Friedberg user input exception.
+     * Parses a string as an integer and wraps invalid input in a Friedberg user
+     * input exception.
      *
      * @param str string to parse
      * @return parsed integer value

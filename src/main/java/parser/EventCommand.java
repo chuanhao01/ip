@@ -6,6 +6,10 @@ import exception.FriedbergUserInputException;
 import task.Event;
 import task.Task;
 
+/**
+ * Handles the 'event' command for Friedberg
+ * To add an event to the list of tasks
+ */
 public class EventCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {

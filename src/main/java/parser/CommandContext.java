@@ -11,10 +11,20 @@ import exception.FriedbergUserInputException;
 import task.Task;
 import task.TaskStringParser;
 
+/**
+ * To be passed when executing a Command, so as to allow the command to act on
+ * the context
+ */
 public class CommandContext {
     private List<Task> tasks;
     private final DataHandler dataHandler;
 
+    /**
+     * Initialise a new CommandContext without any arguments
+     * Defaults to using constants set in the project
+     *
+     * @throws FriedbergException Wraps any Datahandler Exception thrown
+     */
     public CommandContext() throws FriedbergException {
         try {
             this.dataHandler = new DataHandler(Constants.PROJECT_DATA_DIR_PATH, Constants.FRIEDBERG_DATA_FILE_PATH);
@@ -102,7 +112,8 @@ public class CommandContext {
      *
      * @param taskIndex zero-based index of the task to remove
      * @return the task that was removed
-     * @throws FriedbergException if the task index is invalid or the updated list cannot be saved
+     * @throws FriedbergException if the task index is invalid or the updated list
+     *                            cannot be saved
      */
     public Task removeTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);

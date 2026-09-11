@@ -1,5 +1,8 @@
 package parser;
 
+/**
+ * Handles the 'bye' Command for Friedberg
+ */
 public class ByeCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
