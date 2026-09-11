@@ -8,16 +8,34 @@ import exception.FriedbergException;
 import exception.FriedbergInternalException;
 import exception.FriedbergUserInputException;
 
-
+/**
+ * Represents an event task that occurs between two dates.
+ */
 public class Event extends Task {
     private LocalDate fromDatetime;
     private LocalDate toDatetime;
 
+    /**
+     * Creates an event with the given name, start date, and end date.
+     *
+     * @param name name of the event
+     * @param fromDatetime start date in ISO local date format
+     * @param toDatetime end date in ISO local date format
+     * @throws FriedbergException if either date cannot be parsed
+     */
     public Event(String name, String fromDatetime, String toDatetime) throws FriedbergException {
         super(name);
         this.parseAndSetDatetimes(fromDatetime, toDatetime);
     }
 
+    /**
+     * Recreates an event from its serialized status and date fields.
+     *
+     * @param name name of the event
+     * @param status completion status of the event
+     * @param tokens serialized fields containing the start and end dates
+     * @throws FriedbergException if the serialized fields are invalid
+     */
     public Event(String name, TaskStatus status, String[] tokens) throws FriedbergException {
         super(name, status);
         if (tokens.length != 2) {

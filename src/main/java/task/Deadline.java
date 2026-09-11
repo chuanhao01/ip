@@ -8,9 +8,19 @@ import exception.FriedbergException;
 import exception.FriedbergInternalException;
 import exception.FriedbergUserInputException;
 
+/**
+ * Represents a task that must be completed by a specified date.
+ */
 public class Deadline extends Task {
     private LocalDate byDatetime;
 
+    /**
+     * Creates a deadline with the given name and due date.
+     *
+     * @param name name of the deadline
+     * @param byDatetime due date in ISO local date format
+     * @throws FriedbergException if the due date cannot be parsed
+     */
     public Deadline(String name, String byDatetime) throws FriedbergException {
         super(name);
         this.parseAndSetDatetimes(byDatetime);

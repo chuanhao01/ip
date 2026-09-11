@@ -5,11 +5,19 @@ import java.util.Arrays;
 import exception.FriedbergException;
 import exception.FriedbergInternalException;
 
+/**
+ * Represents the shared state and behavior of a task.
+ */
 public abstract class Task {
     private String name;
     // True is done, false is not done
     private TaskStatus status;
 
+    /**
+     * Creates an in-progress task with the given name.
+     *
+     * @param name name of the task
+     */
     public Task(String name) {
         this.name = name;
         this.status = TaskStatus.IN_PROGRESS;
@@ -35,11 +43,23 @@ public abstract class Task {
         return this.status;
     }
 
+    /**
+     * Converts this task's common fields into their storage representation.
+     *
+     * @return serialized task name and status
+     */
     public String serialize() {
         // name,status
         return String.format("%s,%s", this.name, this.status.serialize());
     }
 
+    /**
+     * Recreates a task from its storage representation.
+     *
+     * @param taskString serialized task data
+     * @return task represented by the serialized data
+     * @throws FriedbergException if the task data is invalid or unsupported
+     */
     public static Task deserialize(String taskString) throws FriedbergException {
         // csv format from the way a Task is serialize
         String[] tokens = taskString.split(",");

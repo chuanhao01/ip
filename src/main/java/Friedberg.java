@@ -1,12 +1,21 @@
 import java.util.Scanner;
+
 import exception.FriedbergException;
 import parser.Command;
 import parser.CommandContext;
 import parser.CommandParser;
 
+
+/**
+ * Main Friedberg Chatbot
+ */
 public class Friedberg {
     private static final String NAME = "Friedberg";
     private CommandContext commandContext;
+
+    public Friedberg() throws FriedbergException {
+        this.commandContext = new CommandContext();
+    }
 
     public static void main(String[] args) {
         try {
@@ -17,10 +26,6 @@ public class Friedberg {
         }
     }
 
-    public Friedberg() throws FriedbergException {
-        this.commandContext = new CommandContext();
-    }
-
     /**
      * Runs the chatbot Friedberg
      */
@@ -29,6 +34,9 @@ public class Friedberg {
         this.command();
     }
 
+    /**
+     * Prints the startup banner and greeting.
+     */
     public void greet() {
         String banner = "______     _          _ _                   \n"
                 + "|  ___|   (_)        | | |                  \n"
@@ -45,6 +53,9 @@ public class Friedberg {
         System.out.println();
     }
 
+    /**
+     * Reads and executes user commands until an exit command is received.
+     */
     public void command() {
         Scanner stdin = new Scanner(System.in); // Create a Scanner object
         boolean isBye = false;
