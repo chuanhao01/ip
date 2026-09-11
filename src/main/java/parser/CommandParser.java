@@ -2,6 +2,9 @@ package parser;
 
 import exception.FriedbergException;
 
+/**
+ * Parses user input into commands supported by Friedberg.
+ */
 public class CommandParser {
     private static Command[] commands = {
         // Misc
@@ -21,6 +24,13 @@ public class CommandParser {
         new DeleteCommand()
     };
 
+    /**
+     * Returns the command that handles the given user input.
+     *
+     * @param userInput input entered by the user
+     * @return command that handles the user input
+     * @throws FriedbergException if no supported command matches the input
+     */
     public static Command parse(String userInput) throws FriedbergException {
         for (Command command : CommandParser.commands) {
             if (command.isCommand(userInput)) {

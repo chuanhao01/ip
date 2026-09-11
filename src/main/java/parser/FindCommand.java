@@ -5,6 +5,10 @@ import java.util.List;
 import exception.FriedbergException;
 import task.Task;
 
+/**
+ * Handles the 'find' command for Friedberg.
+ * Filters the tasks by name and lists them.
+ */
 public class FindCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
