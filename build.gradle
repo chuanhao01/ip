@@ -38,7 +38,7 @@ test {
 }
 
 application {
-    mainClass = 'Friedberg'
+    mainClass = 'Cli'
 }
 
 jar {
@@ -49,7 +49,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'friedberg.jar'
+    archiveFileName = 'cli.jar'
 }
 
 run {

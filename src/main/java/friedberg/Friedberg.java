@@ -1,3 +1,4 @@
+package friedberg;
 import java.util.Scanner;
 
 import exception.FriedbergException;
@@ -17,14 +18,6 @@ public class Friedberg {
         this.commandContext = new CommandContext();
     }
 
-    public static void main(String[] args) {
-        try {
-            Friedberg chatbot = new Friedberg();
-            chatbot.run();
-        } catch (FriedbergException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 
     /**
      * Runs the chatbot Friedberg
