@@ -77,6 +77,7 @@ public class CommandContext {
     public void markTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).mark();
+        this.saveTasksToDataHandler();
     }
 
     /**
@@ -88,6 +89,7 @@ public class CommandContext {
     public void unmarkTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).unmark();
+        this.saveTasksToDataHandler();
     }
 
     /**
