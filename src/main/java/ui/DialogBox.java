@@ -30,6 +30,8 @@ public class DialogBox extends HBox {
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
+            assert dialog != null : "DialogBox.fxml must inject dialog";
+            assert displayPicture != null : "DialogBox.fxml must inject displayPicture";
         } catch (IOException e) {
             e.printStackTrace();
         }

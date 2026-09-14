@@ -19,7 +19,7 @@ public interface Command {
      *
      * @param userInput input entered by the user
      * @param commandContext context containing task and storage operations
-     * @return response text for the caller to display
+     * @return non-null, nonblank response text for the caller to display
      * @throws FriedbergException if the command cannot be executed
      */
     String execute(String userInput, CommandContext commandContext) throws FriedbergException;
