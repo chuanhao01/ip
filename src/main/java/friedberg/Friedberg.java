@@ -82,6 +82,8 @@ public class Friedberg {
         try {
             Command command = CommandParser.parse(userInput);
             String message = command.execute(userInput, this.commandContext);
+            assert message != null : "A successful command must return a response";
+            assert !message.isBlank() : "A successful command must return a nonblank response";
             return new CommandResult(message, command.isBye());
         } catch (FriedbergException e) {
             return new CommandResult(String.format("User Error using Friedberg: %s", e.getMessage()), false);

@@ -9,6 +9,7 @@ import exception.FriedbergException;
 import exception.FriedbergInternalException;
 import exception.FriedbergUserInputException;
 import task.Task;
+import task.TaskStatus;
 import task.TaskStringParser;
 
 /**
@@ -77,6 +78,8 @@ public class CommandContext {
     public void markTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).mark();
+        assert this.tasks.get(taskIndex).getStatus() == TaskStatus.DONE
+                : "Marking a task must leave it done";
         this.saveTasksToDataHandler();
     }
 
@@ -89,6 +92,8 @@ public class CommandContext {
     public void unmarkTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).unmark();
+        assert this.tasks.get(taskIndex).getStatus() == TaskStatus.IN_PROGRESS
+                : "Unmarking a task must leave it in progress";
         this.saveTasksToDataHandler();
     }
 
@@ -116,10 +121,11 @@ public class CommandContext {
     /**
      * Adds a new task.
      *
-     * @param task task to add
+     * @param task non-null task to add
      * @throws FriedbergException if the task cannot be saved
      */
     public void addTask(Task task) throws FriedbergException {
+        assert task != null : "A task must not be null when added";
         this.tasks.add(task);
         this.saveTasksToDataHandler();
     }
@@ -159,6 +165,9 @@ public class CommandContext {
             throw new FriedbergInternalException(String.format("Unable to load data, e: %s", e.getMessage()));
         }
         this.tasks = TaskStringParser.deserializeTasks(tasksDataString);
+        assert this.tasks != null : "Successful deserialization must return a task list";
+        assert this.tasks.stream().allMatch(task -> task != null)
+                : "A successfully loaded task list must not contain null entries";
     }
 
     /**

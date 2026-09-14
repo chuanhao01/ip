@@ -45,6 +45,7 @@ dependencies {
 }
 
 test {
+    enableAssertions = true
     useJUnitPlatform()
 
     testLogging {
@@ -74,10 +75,12 @@ shadowJar {
 }
 
 run {
+    enableAssertions = true
     standardInput = System.in
 }
 
 tasks.register('runCli', JavaExec) {
+    enableAssertions = true
     group = 'application'
     description = 'Runs the Friedberg command-line interface.'
     classpath = sourceSets.main.runtimeClasspath

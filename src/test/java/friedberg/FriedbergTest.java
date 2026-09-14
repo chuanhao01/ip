@@ -2,6 +2,7 @@ package friedberg;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.ByteArrayOutputStream;
@@ -77,6 +78,37 @@ class FriedbergTest {
         }
 
         assertEquals("", stdout.toString());
+    }
+
+    @Test
+    void processInput_successfulCommands_returnDisplayableResponses() throws Exception {
+        Friedberg friedberg = createFriedbergWithTempStorage();
+        String[] inputs = {
+            "list", "find missing", "todo read book", "deadline work /by 2026-09-09",
+            "event meeting /from 2026-09-09 /to 2026-09-10",
+            "mark 1", "unmark 1", "find book", "list", "delete 1", "bye"
+        };
+        for (String input : inputs) {
+            CommandResult result = friedberg.processInput(input);
+            assertNotNull(result.message(), input);
+            assertFalse(result.message().isBlank(), input);
+            assertFalse(result.message().startsWith("User Error using Friedberg:"), input);
+        }
+    }
+
+    @Test
+    void processInput_invalidInputs_returnErrorsRatherThanAssertionFailures() throws Exception {
+        Friedberg friedberg = createFriedbergWithTempStorage();
+        String[] inputs = {
+            "unknown", "mark 1", "unmark -1", "delete 1",
+            "deadline work /by invalid", "event meeting",
+            "event meeting /from invalid /to 2026-09-10"
+        };
+        for (String input : inputs) {
+            CommandResult result = friedberg.processInput(input);
+            assertTrue(result.message().startsWith("User Error using Friedberg:"), input);
+            assertFalse(result.shouldExit(), input);
+        }
     }
 
     private Friedberg createFriedbergWithTempStorage() throws Exception {

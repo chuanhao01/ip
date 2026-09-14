@@ -34,6 +34,9 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     public void initialize() {
+        assert scrollPane != null : "MainWindow.fxml must inject scrollPane";
+        assert dialogContainer != null : "MainWindow.fxml must inject dialogContainer";
+        assert userInput != null : "MainWindow.fxml must inject userInput";
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
@@ -67,6 +70,9 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert Platform.isFxApplicationThread()
+                : "GUI input must be handled on the JavaFX Application Thread";
+        assert friedberg != null : "The backend must be injected before accepting GUI input";
         String input = userInput.getText();
         CommandResult result = friedberg.processInput(input);
         dialogContainer.getChildren().addAll(
