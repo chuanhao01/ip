@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import ui.Main;
 
 /**
  * Entrypoint class for starting the JavaFX GUI.

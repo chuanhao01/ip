@@ -1,3 +1,5 @@
+package ui;
+
 import java.io.IOException;
 
 import exception.FriedbergException;
