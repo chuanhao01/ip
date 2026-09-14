@@ -4,7 +4,6 @@ import exception.FriedbergCommandException;
 import exception.FriedbergException;
 import exception.FriedbergUserInputException;
 import task.Event;
-import task.Task;
 
 /**
  * Handles the 'event' command for Friedberg.
@@ -18,6 +17,20 @@ public class EventCommand implements Command {
 
     @Override
     public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
+        Event event = parseEvent(userInput);
+        commandContext.addTask(event);
+        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
+                event.renderTask(), commandContext.getTasksSize());
+    }
+
+    /**
+     * Parses an event without changing tasks or storage.
+     *
+     * @param userInput event command containing a description and start/end dates
+     * @return event represented by the command
+     * @throws FriedbergException if the command word, delimiters, or dates are invalid
+     */
+    private Event parseEvent(String userInput) throws FriedbergException {
         String[] words = userInput.split(" ");
         if (!words[0].equals("event")) {
             throw new FriedbergCommandException(
@@ -34,10 +47,7 @@ public class EventCommand implements Command {
         }
         String fromDatetime = startAndEndDates[0].strip();
         String toDatetime = startAndEndDates[1].strip();
-        Task task = new Event(taskName, fromDatetime, toDatetime);
-        commandContext.addTask(task);
-        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
-                task.renderTask(), commandContext.getTasksSize());
+        return new Event(taskName, fromDatetime, toDatetime);
     }
 
     @Override

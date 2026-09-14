@@ -9,6 +9,9 @@ import exception.FriedbergInternalException;
  * Represents the shared state and behavior of a task.
  */
 public abstract class Task {
+    /** Number of common storage fields: name, completion status, and task type. */
+    private static final int COMMON_FIELD_COUNT = 3;
+
     private String name;
     private TaskStatus status;
 
@@ -61,13 +64,14 @@ public abstract class Task {
     public static Task deserialize(String taskString) throws FriedbergException {
         // Storage fields are name, status, type, followed by type-specific date fields.
         String[] tokens = taskString.split(",");
-        if (tokens.length < 2) {
-            throw new FriedbergInternalException("Expected deserialize task to have at least 2 tokens");
+        if (tokens.length < COMMON_FIELD_COUNT) {
+            throw new FriedbergInternalException(
+                    "Expected serialized task to contain name, status, and type");
         }
         String name = tokens[0];
         TaskStatus status = TaskStatus.deserialize(tokens[1]);
         String taskType = tokens[2];
-        String[] otherTokens = Arrays.copyOfRange(tokens, 3, tokens.length);
+        String[] otherTokens = Arrays.copyOfRange(tokens, COMMON_FIELD_COUNT, tokens.length);
         if (taskType.equals("T")) {
             return new ToDo(name, status);
         } else if (taskType.equals("D")) {
