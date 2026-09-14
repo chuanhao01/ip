@@ -17,24 +17,22 @@ public class DeadlineCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String[] words = userInput.split(" ");
         if (!words[0].equals("deadline")) {
             throw new FriedbergCommandException(
                     String.format("Expected deadline command but instead got|userInput: %s", userInput), "deadline");
         }
-        words = userInput.replace("deadline ", "").split("/by ");
-        // For later error level
-        if (words.length != 2) {
+        String[] descriptionAndDate = userInput.replace("deadline ", "").split("/by ");
+        if (descriptionAndDate.length != 2) {
             throw new FriedbergUserInputException("deadline task expected to have /by");
         }
-        String taskName = words[0].strip();
-        String byDatetime = words[1].strip();
+        String taskName = descriptionAndDate[0].strip();
+        String byDatetime = descriptionAndDate[1].strip();
         Task task = new Deadline(taskName, byDatetime);
         commandContext.addTask(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println(task.renderTask());
-        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
+        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
+                task.renderTask(), commandContext.getTasksSize());
     }
 
     @Override

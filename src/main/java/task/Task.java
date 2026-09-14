@@ -10,7 +10,6 @@ import exception.FriedbergInternalException;
  */
 public abstract class Task {
     private String name;
-    // True is done, false is not done
     private TaskStatus status;
 
     /**
@@ -24,17 +23,16 @@ public abstract class Task {
     }
 
     /**
-     * Alternative initializer for Task when name and status is known
+     * Creates a task with a known name and completion status.
      *
-     * @param name
-     * @param status
+     * @param name task description
+     * @param status completion status
      */
     public Task(String name, TaskStatus status) {
         this.name = name;
         this.status = status;
     }
 
-    // Getters
     public String getName() {
         return this.name;
     }
@@ -61,7 +59,7 @@ public abstract class Task {
      * @throws FriedbergException if the task data is invalid or unsupported
      */
     public static Task deserialize(String taskString) throws FriedbergException {
-        // csv format from the way a Task is serialize
+        // Storage fields are name, status, type, followed by type-specific date fields.
         String[] tokens = taskString.split(",");
         if (tokens.length < 2) {
             throw new FriedbergInternalException("Expected deserialize task to have at least 2 tokens");
@@ -96,8 +94,9 @@ public abstract class Task {
     }
 
     /**
-     * Returns the formatted string to render this task on stdout
+     * Returns the task description and completion status for either frontend.
      *
+     * @return formatted task text
      */
     public String renderTask() {
         return String.format("%s %s", this.status.renderTaskStatus(), this.name);

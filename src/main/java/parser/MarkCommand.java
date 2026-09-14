@@ -14,7 +14,7 @@ public class MarkCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String[] words = userInput.split("\\s+");
         if (words.length != 2) {
             throw new FriedbergCommandException(
@@ -28,8 +28,7 @@ public class MarkCommand implements Command {
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;
         commandContext.markTask(taskIndex);
-        System.out.println("Nice! I've marked this task as done:");
-        System.out.println(commandContext.renderTask(taskIndex));
+        return String.format("Nice! I've marked this task as done:\n%s", commandContext.renderTask(taskIndex));
     }
 
     @Override

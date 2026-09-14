@@ -6,8 +6,8 @@ import task.Task;
 import task.ToDo;
 
 /**
- * Handles the 'todo' command for Friedberg
- * TO add a todo to the list of tasks
+ * Handles the 'todo' command for Friedberg.
+ * Adds a todo to the list of tasks.
  */
 public class TodoCommand implements Command {
     @Override
@@ -16,7 +16,7 @@ public class TodoCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String[] words = userInput.split(" ");
         if (!words[0].equals("todo")) {
             throw new FriedbergCommandException(
@@ -25,9 +25,8 @@ public class TodoCommand implements Command {
         String taskName = userInput.replace("todo ", "").strip();
         Task task = new ToDo(taskName);
         commandContext.addTask(task);
-        System.out.println("Got it. I've added this task:");
-        System.out.println(task.renderTask());
-        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
+        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
+                task.renderTask(), commandContext.getTasksSize());
     }
 
     @Override

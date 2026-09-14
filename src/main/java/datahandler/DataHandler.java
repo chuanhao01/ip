@@ -11,19 +11,16 @@ public class DataHandler {
     private final Path dataFilePath;
 
     /**
-     * Initalize Datahandler with the given dataFolderPath and dataFilePath
+     * Initialises storage, creating the directory and file when needed.
      *
      * @param dataFolderPath Folder where the data will be held
      * @param dataFilePath File where the data should be saved to
-     * @throws Exception
+     * @throws Exception if the storage directory or file cannot be created
      */
     public DataHandler(Path dataFolderPath, Path dataFilePath) throws Exception {
         this.dataFolderPath = dataFolderPath;
         this.dataFilePath = dataFilePath;
-        // On initialization, it will create the directory and file if it does not
-        // exists
-        if (!(Files.exists(this.dataFolderPath) && Files.isDirectory(this.dataFolderPath))) {
-            // Data directory does not exist
+        if (!Files.isDirectory(this.dataFolderPath)) {
             Files.createDirectories(this.dataFolderPath);
         }
         if (!Files.exists(this.dataFilePath)) {

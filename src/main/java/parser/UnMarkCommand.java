@@ -14,7 +14,7 @@ public class UnMarkCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String[] words = userInput.split("\\s+");
         if (words.length != 2) {
             throw new FriedbergCommandException(
@@ -28,8 +28,7 @@ public class UnMarkCommand implements Command {
         }
         int taskIndex = ParserUtil.parseInt(words[1]) - 1;
         commandContext.unmarkTask(taskIndex);
-        System.out.println("OK, I've marked this task as not done yet:");
-        System.out.println(commandContext.renderTask(taskIndex));
+        return String.format("OK, I've marked this task as not done yet:\n%s", commandContext.renderTask(taskIndex));
     }
 
     @Override
