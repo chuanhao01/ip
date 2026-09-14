@@ -19,8 +19,7 @@ public class EventCommand implements Command {
     public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         Event event = parseEvent(userInput);
         commandContext.addTask(event);
-        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
-                event.renderTask(), commandContext.getTasksSize());
+        return TaskResponseFormatter.formatAddition(event, commandContext.getTasksSize());
     }
 
     /**

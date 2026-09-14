@@ -31,8 +31,7 @@ public class DeadlineCommand implements Command {
         String byDatetime = descriptionAndDate[1].strip();
         Task task = new Deadline(taskName, byDatetime);
         commandContext.addTask(task);
-        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
-                task.renderTask(), commandContext.getTasksSize());
+        return TaskResponseFormatter.formatAddition(task, commandContext.getTasksSize());
     }
 
     @Override
