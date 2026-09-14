@@ -35,6 +35,18 @@ public class CommandContext {
     }
 
     /**
+     * Initialises a new CommandContext with the given data handler.
+     * This is useful for tests that need temporary storage.
+     *
+     * @param dataHandler data handler used to load and save tasks
+     * @throws FriedbergException if tasks cannot be loaded or deserialized
+     */
+    public CommandContext(DataHandler dataHandler) throws FriedbergException {
+        this.dataHandler = dataHandler;
+        this.loadTasksFromDataHandler();
+    }
+
+    /**
      * Returns the number of tasks in the current task list.
      *
      * @return number of tasks in the current task list
@@ -44,13 +56,16 @@ public class CommandContext {
     }
 
     /**
-     * Lists all current tasks.
+     * Renders all current tasks as a multiline string.
+     *
+     * @return formatted task list for display
      */
-    public void listTasks() {
-        System.out.println("Here are the tasks in your list:");
+    public String renderTasks() {
+        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
         for (int i = 0; i < this.tasks.size(); i++) {
-            System.out.printf("%d. %s%n", i + 1, this.tasks.get(i).renderTask());
+            response.append(String.format("\n%d. %s", i + 1, this.tasks.get(i).renderTask()));
         }
+        return response.toString();
     }
 
     /**
@@ -62,6 +77,7 @@ public class CommandContext {
     public void markTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).mark();
+        this.saveTasksToDataHandler();
     }
 
     /**
@@ -73,6 +89,7 @@ public class CommandContext {
     public void unmarkTask(int taskIndex) throws FriedbergException {
         this.validateTaskIndex(taskIndex);
         this.tasks.get(taskIndex).unmark();
+        this.saveTasksToDataHandler();
     }
 
     /**

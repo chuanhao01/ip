@@ -14,12 +14,11 @@ public class DeleteCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         int taskIndex = ParserUtil.parseInt(userInput.replace("delete ", "")) - 1;
         Task removedTask = commandContext.removeTask(taskIndex);
-        System.out.println("Noted. I've removed this task:");
-        System.out.println(removedTask.renderTask());
-        System.out.printf("Now you have %d tasks in the list.%n", commandContext.getTasksSize());
+        return String.format("Noted. I've removed this task:\n%s\nNow you have %d tasks in the list.",
+                removedTask.renderTask(), commandContext.getTasksSize());
     }
 
     @Override

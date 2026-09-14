@@ -3,7 +3,7 @@ package parser;
 import exception.FriedbergException;
 
 /**
- * Common interface to be implemented by all commands used in Friedberg
+ * Common interface to be implemented by all commands used in Friedberg.
  */
 public interface Command {
     /**
@@ -15,13 +15,14 @@ public interface Command {
     boolean isCommand(String userInput);
 
     /**
-     * Executes the command, calling follow-up actions on the command context if needed.
+     * Executes the command and returns the message that should be shown to the user.
      *
      * @param userInput input entered by the user
      * @param commandContext context containing task and storage operations
+     * @return response text for the caller to display
      * @throws FriedbergException if the command cannot be executed
      */
-    void execute(String userInput, CommandContext commandContext) throws FriedbergException;
+    String execute(String userInput, CommandContext commandContext) throws FriedbergException;
 
     /**
      * Checks whether this command exits the chatbot.

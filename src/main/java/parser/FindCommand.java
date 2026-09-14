@@ -16,17 +16,17 @@ public class FindCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) throws FriedbergException {
+    public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
         String tasksNameFilter = userInput.replace("find ", "");
         List<Task> filteredTasks = commandContext.filterTasks(tasksNameFilter);
         if (filteredTasks.isEmpty()) {
-            System.out.println("There are no tasks matching your search.");
-        } else {
-            System.out.println("Here are the matching tasks in your list:");
-            for (Task task : filteredTasks) {
-                System.out.println(task.renderTask());
-            }
+            return "There are no tasks matching your search.";
         }
+        StringBuilder response = new StringBuilder("Here are the matching tasks in your list:");
+        for (Task task : filteredTasks) {
+            response.append("\n").append(task.renderTask());
+        }
+        return response.toString();
     }
 
     @Override

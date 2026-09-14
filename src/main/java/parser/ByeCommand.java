@@ -1,7 +1,7 @@
 package parser;
 
 /**
- * Handles the 'bye' Command for Friedberg
+ * Handles the 'bye' Command for Friedberg.
  */
 public class ByeCommand implements Command {
     @Override
@@ -15,7 +15,7 @@ public class ByeCommand implements Command {
     }
 
     @Override
-    public void execute(String userInput, CommandContext commandContext) {
-        System.out.println("Bye bye, see you again next time.");
+    public String execute(String userInput, CommandContext commandContext) {
+        return "Bye bye, see you again next time.";
     }
 }
