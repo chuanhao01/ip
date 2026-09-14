@@ -77,6 +77,17 @@ run {
     standardInput = System.in
 }
 
+tasks.register('runCli', JavaExec) {
+    group = 'application'
+    description = 'Runs the Friedberg command-line interface.'
+    classpath = sourceSets.main.runtimeClasspath
+    mainClass.set('Cli')
+    standardInput = System.in
+    javaLauncher = javaToolchains.launcherFor {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
 checkstyle {
     toolVersion = '14.1.0'
 }
