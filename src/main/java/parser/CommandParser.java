@@ -35,6 +35,7 @@ public class CommandParser {
      * @throws FriedbergException if no supported command matches the input
      */
     public static Command parse(String userInput) throws FriedbergException {
+        ParserUtil.validateRawInput(userInput);
         for (Command command : CommandParser.commands) {
             if (command.isCommand(userInput)) {
                 return command;

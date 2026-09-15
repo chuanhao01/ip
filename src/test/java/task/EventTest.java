@@ -45,9 +45,31 @@ class EventTest {
     }
 
     @Test
-    void event_invalidDeserializationConstructor_throwsFriedbergException() {
-        String[] tokens = { "2026-09-09" };
+    void event_nonexistentDate_throwsFriedbergException() {
+        assertThrows(
+                FriedbergException.class, () -> new Event("project meeting", "2026-02-30", "2026-03-01"));
+    }
 
-        assertThrows(FriedbergException.class, () -> new Event("project meeting", TaskStatus.DONE, tokens));
+    @Test
+    void event_startAfterEnd_throwsFriedbergException() {
+        assertThrows(
+                FriedbergException.class, () -> new Event("project meeting", "2026-09-11", "2026-09-10"));
+    }
+
+    @Test
+    void event_equalDates_throwsFriedbergException() {
+        assertThrows(
+                FriedbergException.class, () -> new Event("project meeting", "2026-09-10", "2026-09-10"));
+    }
+
+    @Test
+    void event_invalidDeserializationConstructor_throwsFriedbergException() {
+        String[] incompleteTokens = { "2026-09-09" };
+        String[] unorderedTokens = { "2026-09-11", "2026-09-10" };
+
+        assertThrows(
+                FriedbergException.class, () -> new Event("project meeting", TaskStatus.DONE, incompleteTokens));
+        assertThrows(
+                FriedbergException.class, () -> new Event("project meeting", TaskStatus.DONE, unorderedTokens));
     }
 }

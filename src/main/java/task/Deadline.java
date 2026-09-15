@@ -1,7 +1,9 @@
 package task;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import common.Constants;
 import exception.FriedbergException;
@@ -12,6 +14,9 @@ import exception.FriedbergUserInputException;
  * Represents a task that must be completed by a specified date.
  */
 public class Deadline extends Task {
+    private static final DateTimeFormatter INPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+            .withResolverStyle(ResolverStyle.STRICT);
+
     private LocalDate byDatetime;
 
     /**
@@ -40,7 +45,7 @@ public class Deadline extends Task {
 
     private void parseAndSetDatetimes(String byDatetime) throws FriedbergException {
         try {
-            this.byDatetime = LocalDate.parse(byDatetime);
+            this.byDatetime = LocalDate.parse(byDatetime, INPUT_DATE_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new FriedbergUserInputException("Unable to parse datetime input, please use the yyyy-mm-dd format");
         }
