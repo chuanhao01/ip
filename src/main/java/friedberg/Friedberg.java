@@ -86,7 +86,7 @@ public class Friedberg {
      * @return command message and whether the frontend should end the session
      */
     public CommandResult processInput(String input) {
-        String userInput = input.strip();
+        String userInput = input;
         try {
             Command command = CommandParser.parse(userInput);
             String message = command.execute(userInput, this.commandContext);

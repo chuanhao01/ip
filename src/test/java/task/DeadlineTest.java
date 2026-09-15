@@ -38,6 +38,11 @@ class DeadlineTest {
     }
 
     @Test
+    void deadline_nonexistentDate_throwsFriedbergException() {
+        assertThrows(FriedbergException.class, () -> new Deadline("submit ip", "2026-02-30"));
+    }
+
+    @Test
     void deadline_invalidDeserializationConstructor_throwsFriedbergException() {
         String[] tokens = {"2026-09-09", "extra token"};
 

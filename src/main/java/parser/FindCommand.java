@@ -12,12 +12,12 @@ import task.Task;
 public class FindCommand implements Command {
     @Override
     public boolean isCommand(String userInput) {
-        return userInput.startsWith("find");
+        return ParserUtil.hasCommandWord(userInput, "find");
     }
 
     @Override
     public String execute(String userInput, CommandContext commandContext) throws FriedbergException {
-        String tasksNameFilter = userInput.replace("find ", "");
+        String tasksNameFilter = ParserUtil.parseDescriptionCommand(userInput, "find", "search query");
         List<Task> filteredTasks = commandContext.filterTasks(tasksNameFilter);
         if (filteredTasks.isEmpty()) {
             return "There are no tasks matching your search.";

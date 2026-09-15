@@ -27,7 +27,7 @@ class FriedbergTest {
     void processInput_successiveCommands_shareTaskState() throws Exception {
         Friedberg friedberg = createFriedbergWithTempStorage();
 
-        CommandResult addResult = friedberg.processInput("  todo read book  ");
+        CommandResult addResult = friedberg.processInput("todo read book");
         CommandResult listResult = friedberg.processInput("list");
 
         assertFalse(addResult.shouldExit());
@@ -98,6 +98,19 @@ class FriedbergTest {
         assertTrue(byeResult.shouldExit());
         assertEquals(ResponseType.DEFAULT, byeResult.responseType());
         assertEquals("Bye bye, see you again next time.", byeResult.message());
+    }
+
+    @Test
+    void processInput_invalidWhitespace_returnsErrorsWithoutChangingTasks() throws Exception {
+        Friedberg friedberg = createFriedbergWithTempStorage();
+        String[] inputs = {" todo read book", "todo read book ", "todo  read book", "todo\tread book"};
+
+        for (String input : inputs) {
+            CommandResult result = friedberg.processInput(input);
+            assertEquals(ResponseType.ERROR, result.responseType(), input);
+            assertTrue(result.message().startsWith("User Error using Friedberg:"), input);
+        }
+        assertEquals("Here are the tasks in your list:", friedberg.processInput("list").message());
     }
 
     @Test

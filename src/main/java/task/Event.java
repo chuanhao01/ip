@@ -1,7 +1,9 @@
 package task;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 
 import common.Constants;
 import exception.FriedbergException;
@@ -12,6 +14,9 @@ import exception.FriedbergUserInputException;
  * Represents an event task that occurs between two dates.
  */
 public class Event extends Task {
+    private static final DateTimeFormatter INPUT_DATE_FORMATTER = DateTimeFormatter.ofPattern("uuuu-MM-dd")
+            .withResolverStyle(ResolverStyle.STRICT);
+
     private LocalDate fromDatetime;
     private LocalDate toDatetime;
 
@@ -46,10 +51,13 @@ public class Event extends Task {
 
     private void parseAndSetDatetimes(String fromDatetime, String toDatetime) throws FriedbergException {
         try {
-            this.fromDatetime = LocalDate.parse(fromDatetime);
-            this.toDatetime = LocalDate.parse(toDatetime);
+            this.fromDatetime = LocalDate.parse(fromDatetime, INPUT_DATE_FORMATTER);
+            this.toDatetime = LocalDate.parse(toDatetime, INPUT_DATE_FORMATTER);
         } catch (DateTimeParseException e) {
             throw new FriedbergUserInputException("Unable to parse datetime input, please use the yyyy-mm-dd format");
+        }
+        if (!this.fromDatetime.isBefore(this.toDatetime)) {
+            throw new FriedbergUserInputException("Event start date must be before its end date");
         }
     }
 
