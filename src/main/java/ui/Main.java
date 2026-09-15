@@ -30,6 +30,11 @@ public class Main extends Application {
             AnchorPane rootPane = fxmlLoader.load();
             Scene scene = new Scene(rootPane);
             stage.setScene(scene);
+            stage.setTitle("Friedberg");
+            stage.setMinHeight(360);
+            stage.setMinWidth(417);
+            stage.getIcons().add(new javafx.scene.image.Image(
+                    Main.class.getResource("/images/DaDuke.png").toExternalForm()));
             fxmlLoader.<MainWindow>getController().setFriedberg(friedberg);
             stage.show();
         } catch (IOException e) {

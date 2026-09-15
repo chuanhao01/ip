@@ -4,6 +4,7 @@ import java.io.InputStream;
 
 import friedberg.CommandResult;
 import friedberg.Friedberg;
+import friedberg.ResponseType;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
@@ -61,7 +62,8 @@ public class MainWindow extends AnchorPane {
      */
     public void setFriedberg(Friedberg friedberg) {
         this.friedberg = friedberg;
-        dialogContainer.getChildren().add(DialogBox.getFriedbergDialog(friedberg.getGreeting(), friedbergImage));
+        dialogContainer.getChildren().add(DialogBox.getFriedbergDialog(friedberg.getGreeting(), friedbergImage,
+                ResponseType.DEFAULT));
     }
 
     /**
@@ -77,7 +79,7 @@ public class MainWindow extends AnchorPane {
         CommandResult result = friedberg.processInput(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getFriedbergDialog(result.message(), friedbergImage)
+                DialogBox.getFriedbergDialog(result.message(), friedbergImage, result.responseType())
         );
         userInput.clear();
 

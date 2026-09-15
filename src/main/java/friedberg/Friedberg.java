@@ -3,9 +3,17 @@ package friedberg;
 import java.util.Scanner;
 
 import exception.FriedbergException;
+import parser.ArchiveCommand;
 import parser.Command;
 import parser.CommandContext;
 import parser.CommandParser;
+import parser.DeadlineCommand;
+import parser.DeleteCommand;
+import parser.EventCommand;
+import parser.MarkCommand;
+import parser.TodoCommand;
+import parser.UnMarkCommand;
+import parser.UnarchiveCommand;
 
 /**
  * Main Friedberg Chatbot.
@@ -84,10 +92,32 @@ public class Friedberg {
             String message = command.execute(userInput, this.commandContext);
             assert message != null : "A successful command must return a response";
             assert !message.isBlank() : "A successful command must return a nonblank response";
-            return new CommandResult(message, command.isBye());
+            return new CommandResult(message, command.isBye(), this.classifyResponse(command));
         } catch (FriedbergException e) {
-            return new CommandResult(String.format("User Error using Friedberg: %s", e.getMessage()), false);
+            return new CommandResult(String.format("User Error using Friedberg: %s", e.getMessage()), false,
+                    ResponseType.ERROR);
         }
+    }
+
+    /**
+     * Classifies a command result for GUI styling without changing command behavior.
+     *
+     * @param command successfully parsed and executed command
+     * @return semantic response type for the command
+     */
+    private ResponseType classifyResponse(Command command) {
+        if (command instanceof TodoCommand || command instanceof DeadlineCommand || command instanceof EventCommand) {
+            return ResponseType.ADD;
+        }
+        if (command instanceof MarkCommand || command instanceof UnMarkCommand) {
+            return ResponseType.STATUS;
+        }
+        boolean isRemoveCommand = command instanceof DeleteCommand || command instanceof ArchiveCommand
+                || command instanceof UnarchiveCommand;
+        if (isRemoveCommand) {
+            return ResponseType.REMOVE;
+        }
+        return ResponseType.DEFAULT;
     }
 
     /**

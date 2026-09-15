@@ -31,8 +31,10 @@ class FriedbergTest {
         CommandResult listResult = friedberg.processInput("list");
 
         assertFalse(addResult.shouldExit());
+        assertEquals(ResponseType.ADD, addResult.responseType());
         assertEquals("Got it. I've added this task:\n[T][ ] read book\nNow you have 1 tasks in the list.",
                 addResult.message());
+        assertEquals(ResponseType.DEFAULT, listResult.responseType());
         assertEquals("Here are the tasks in your list:\n1. [T][ ] read book", listResult.message());
     }
 
@@ -42,14 +44,20 @@ class FriedbergTest {
         friedberg.processInput("todo read book");
         friedberg.processInput("todo write code");
 
-        assertEquals("Here are the matching tasks in your list:\n[T][ ] read book",
-                friedberg.processInput("find read").message());
-        assertEquals("Nice! I've marked this task as done:\n[T][X] read book",
-                friedberg.processInput("mark 1").message());
-        assertEquals("OK, I've marked this task as not done yet:\n[T][ ] read book",
-                friedberg.processInput("unmark 1").message());
+        CommandResult findResult = friedberg.processInput("find read");
+        CommandResult markResult = friedberg.processInput("mark 1");
+        CommandResult unmarkResult = friedberg.processInput("unmark 1");
+        CommandResult deleteResult = friedberg.processInput("delete 1");
+
+        assertEquals(ResponseType.DEFAULT, findResult.responseType());
+        assertEquals("Here are the matching tasks in your list:\n[T][ ] read book", findResult.message());
+        assertEquals(ResponseType.STATUS, markResult.responseType());
+        assertEquals("Nice! I've marked this task as done:\n[T][X] read book", markResult.message());
+        assertEquals(ResponseType.STATUS, unmarkResult.responseType());
+        assertEquals("OK, I've marked this task as not done yet:\n[T][ ] read book", unmarkResult.message());
+        assertEquals(ResponseType.REMOVE, deleteResult.responseType());
         assertEquals("Noted. I've removed this task:\n[T][ ] read book\nNow you have 1 tasks in the list.",
-                friedberg.processInput("delete 1").message());
+                deleteResult.message());
     }
 
     @Test
@@ -58,14 +66,21 @@ class FriedbergTest {
         friedberg.processInput("todo read book");
         friedberg.processInput("todo write code");
 
+        CommandResult archiveResult = friedberg.processInput("archive 1");
+        CommandResult listResult = friedberg.processInput("list");
+        CommandResult archiveListResult = friedberg.processInput("alist");
+        CommandResult unarchiveResult = friedberg.processInput("unarchive 1");
+
+        assertEquals(ResponseType.REMOVE, archiveResult.responseType());
         assertEquals("Archived this task:\n[T][ ] read book\nNow you have 1 tasks in the list and 1 archived tasks.",
-                friedberg.processInput("archive 1").message());
-        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code",
-                friedberg.processInput("list").message());
-        assertEquals("Here are the tasks in your archive:\n1. [T][ ] read book",
-                friedberg.processInput("alist").message());
+                archiveResult.message());
+        assertEquals(ResponseType.DEFAULT, listResult.responseType());
+        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code", listResult.message());
+        assertEquals(ResponseType.DEFAULT, archiveListResult.responseType());
+        assertEquals("Here are the tasks in your archive:\n1. [T][ ] read book", archiveListResult.message());
+        assertEquals(ResponseType.REMOVE, unarchiveResult.responseType());
         assertEquals("Unarchived this task:\n[T][ ] read book\nNow you have 2 tasks in the list and 0 archived tasks.",
-                friedberg.processInput("unarchive 1").message());
+                unarchiveResult.message());
         assertEquals("Here are the tasks in your list:\n1. [T][ ] write code\n2. [T][ ] read book",
                 friedberg.processInput("list").message());
     }
@@ -78,8 +93,10 @@ class FriedbergTest {
         CommandResult byeResult = friedberg.processInput("bye");
 
         assertFalse(errorResult.shouldExit());
+        assertEquals(ResponseType.ERROR, errorResult.responseType());
         assertTrue(errorResult.message().startsWith("User Error using Friedberg:"));
         assertTrue(byeResult.shouldExit());
+        assertEquals(ResponseType.DEFAULT, byeResult.responseType());
         assertEquals("Bye bye, see you again next time.", byeResult.message());
     }
 
@@ -125,6 +142,7 @@ class FriedbergTest {
         for (String input : inputs) {
             CommandResult result = friedberg.processInput(input);
             assertTrue(result.message().startsWith("User Error using Friedberg:"), input);
+            assertEquals(ResponseType.ERROR, result.responseType(), input);
             assertFalse(result.shouldExit(), input);
         }
     }
