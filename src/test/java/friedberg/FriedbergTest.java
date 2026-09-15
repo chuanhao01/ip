@@ -53,6 +53,24 @@ class FriedbergTest {
     }
 
     @Test
+    void processInput_archiveListUnarchive_returnExpectedMessages() throws Exception {
+        Friedberg friedberg = createFriedbergWithTempStorage();
+        friedberg.processInput("todo read book");
+        friedberg.processInput("todo write code");
+
+        assertEquals("Archived this task:\n[T][ ] read book\nNow you have 1 tasks in the list and 1 archived tasks.",
+                friedberg.processInput("archive 1").message());
+        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code",
+                friedberg.processInput("list").message());
+        assertEquals("Here are the tasks in your archive:\n1. [T][ ] read book",
+                friedberg.processInput("alist").message());
+        assertEquals("Unarchived this task:\n[T][ ] read book\nNow you have 2 tasks in the list and 0 archived tasks.",
+                friedberg.processInput("unarchive 1").message());
+        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code\n2. [T][ ] read book",
+                friedberg.processInput("list").message());
+    }
+
+    @Test
     void processInput_errorAndBye_returnExpectedFlags() throws Exception {
         Friedberg friedberg = createFriedbergWithTempStorage();
 
@@ -86,7 +104,7 @@ class FriedbergTest {
         String[] inputs = {
             "list", "find missing", "todo read book", "deadline work /by 2026-09-09",
             "event meeting /from 2026-09-09 /to 2026-09-10",
-            "mark 1", "unmark 1", "find book", "list", "delete 1", "bye"
+            "mark 1", "unmark 1", "archive 1", "alist", "unarchive 1", "find book", "list", "delete 1", "bye"
         };
         for (String input : inputs) {
             CommandResult result = friedberg.processInput(input);
@@ -100,7 +118,7 @@ class FriedbergTest {
     void processInput_invalidInputs_returnErrorsRatherThanAssertionFailures() throws Exception {
         Friedberg friedberg = createFriedbergWithTempStorage();
         String[] inputs = {
-            "unknown", "mark 1", "unmark -1", "delete 1",
+            "unknown", "mark 1", "unmark -1", "delete 1", "archive 1", "unarchive 1",
             "deadline work /by invalid", "event meeting",
             "event meeting /from invalid /to 2026-09-10"
         };

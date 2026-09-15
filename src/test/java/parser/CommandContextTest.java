@@ -84,10 +84,29 @@ class CommandContextTest {
     }
 
     @Test
+    void archiveAndUnarchive_validTask_persistExpectedLists() throws Exception {
+        context.addTask(new ToDo("read book"));
+        context.addTask(new ToDo("write code"));
+
+        context.archiveTask(0);
+        CommandContext archivedContext = new CommandContext(dataHandler);
+        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code", archivedContext.renderTasks());
+        assertEquals("Here are the tasks in your archive:\n1. [T][ ] read book", archivedContext.renderArchivedTasks());
+
+        archivedContext.unarchiveTask(0);
+        CommandContext unarchivedContext = new CommandContext(dataHandler);
+        assertEquals("Here are the tasks in your list:\n1. [T][ ] write code\n2. [T][ ] read book",
+                unarchivedContext.renderTasks());
+        assertEquals("Here are the tasks in your archive:", unarchivedContext.renderArchivedTasks());
+    }
+
+    @Test
     void taskOperations_invalidIndices_throwUserInputException() {
         assertThrows(FriedbergUserInputException.class, () -> context.markTask(-1));
         assertThrows(FriedbergUserInputException.class, () -> context.unmarkTask(0));
         assertThrows(FriedbergUserInputException.class, () -> context.removeTask(0));
+        assertThrows(FriedbergUserInputException.class, () -> context.archiveTask(0));
+        assertThrows(FriedbergUserInputException.class, () -> context.unarchiveTask(0));
     }
 
     @Test

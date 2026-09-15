@@ -17,8 +17,12 @@ import task.TaskStringParser;
  * the context
  */
 public class CommandContext {
+    private static final String ARCHIVE_FILE_NAME = "friedberg_archive";
+
     private List<Task> tasks;
+    private List<Task> archivedTasks;
     private final DataHandler dataHandler;
+    private final DataHandler archiveDataHandler;
 
     /**
      * Initialise a new CommandContext without any arguments
@@ -29,10 +33,13 @@ public class CommandContext {
     public CommandContext() throws FriedbergException {
         try {
             this.dataHandler = new DataHandler(Constants.PROJECT_DATA_DIR_PATH, Constants.FRIEDBERG_DATA_FILE_PATH);
+            this.archiveDataHandler = new DataHandler(Constants.PROJECT_DATA_DIR_PATH,
+                    Constants.FRIEDBERG_ARCHIVE_FILE_PATH);
         } catch (Exception e) {
             throw new FriedbergInternalException(e.getMessage());
         }
         this.loadTasksFromDataHandler();
+        this.loadArchivedTasksFromDataHandler();
     }
 
     /**
@@ -43,8 +50,30 @@ public class CommandContext {
      * @throws FriedbergException if tasks cannot be loaded or deserialized
      */
     public CommandContext(DataHandler dataHandler) throws FriedbergException {
+        try {
+            this.archiveDataHandler = new DataHandler(dataHandler.getDataFolderPath(),
+                    dataHandler.getDataFolderPath().resolve(ARCHIVE_FILE_NAME));
+        } catch (Exception e) {
+            throw new FriedbergInternalException(e.getMessage());
+        }
         this.dataHandler = dataHandler;
         this.loadTasksFromDataHandler();
+        this.loadArchivedTasksFromDataHandler();
+    }
+
+    /**
+     * Initialises a new CommandContext with separate handlers for normal and archived tasks.
+     * This is useful for tests that need full control over both storage files.
+     *
+     * @param dataHandler data handler used to load and save normal tasks
+     * @param archiveDataHandler data handler used to load and save archived tasks
+     * @throws FriedbergException if tasks cannot be loaded or deserialized
+     */
+    public CommandContext(DataHandler dataHandler, DataHandler archiveDataHandler) throws FriedbergException {
+        this.dataHandler = dataHandler;
+        this.archiveDataHandler = archiveDataHandler;
+        this.loadTasksFromDataHandler();
+        this.loadArchivedTasksFromDataHandler();
     }
 
     /**
@@ -62,11 +91,25 @@ public class CommandContext {
      * @return formatted task list for display
      */
     public String renderTasks() {
-        StringBuilder response = new StringBuilder("Here are the tasks in your list:");
-        for (int i = 0; i < this.tasks.size(); i++) {
-            response.append(String.format("\n%d. %s", i + 1, this.tasks.get(i).renderTask()));
-        }
-        return response.toString();
+        return this.renderTaskList("Here are the tasks in your list:", this.tasks);
+    }
+
+    /**
+     * Returns the number of tasks in the archive list.
+     *
+     * @return number of archived tasks
+     */
+    public int getArchivedTasksSize() {
+        return this.archivedTasks.size();
+    }
+
+    /**
+     * Renders all archived tasks as a multiline string.
+     *
+     * @return formatted archive list for display
+     */
+    public String renderArchivedTasks() {
+        return this.renderTaskList("Here are the tasks in your archive:", this.archivedTasks);
     }
 
     /**
@@ -145,11 +188,59 @@ public class CommandContext {
         return removedTask;
     }
 
+    /**
+     * Moves a task from the normal task list to the archive list.
+     *
+     * @param taskIndex zero-based index in the normal task list
+     * @return the task that was archived
+     * @throws FriedbergException if the index is invalid or either list cannot be saved
+     */
+    public Task archiveTask(int taskIndex) throws FriedbergException {
+        this.validateTaskIndex(taskIndex);
+        Task archivedTask = this.tasks.remove(taskIndex);
+        this.archivedTasks.add(archivedTask);
+        this.saveTasksToDataHandler();
+        this.saveArchivedTasksToDataHandler();
+        return archivedTask;
+    }
+
+    /**
+     * Moves a task from the archive list back to the end of the normal task list.
+     *
+     * @param taskIndex zero-based index in the archive list
+     * @return the task that was unarchived
+     * @throws FriedbergException if the index is invalid or either list cannot be saved
+     */
+    public Task unarchiveTask(int taskIndex) throws FriedbergException {
+        this.validateArchivedTaskIndex(taskIndex);
+        Task unarchivedTask = this.archivedTasks.remove(taskIndex);
+        this.tasks.add(unarchivedTask);
+        this.saveTasksToDataHandler();
+        this.saveArchivedTasksToDataHandler();
+        return unarchivedTask;
+    }
+
     private void validateTaskIndex(int taskIndex) throws FriedbergUserInputException {
-        if (taskIndex < 0 || taskIndex >= this.tasks.size()) {
+        this.validateIndex(taskIndex, this.tasks.size());
+    }
+
+    private void validateArchivedTaskIndex(int taskIndex) throws FriedbergUserInputException {
+        this.validateIndex(taskIndex, this.archivedTasks.size());
+    }
+
+    private void validateIndex(int taskIndex, int listSize) throws FriedbergUserInputException {
+        if (taskIndex < 0 || taskIndex >= listSize) {
             throw new FriedbergUserInputException(
-                    String.format("expected taskIndex to be in range of %d items", this.tasks.size()));
+                    String.format("expected taskIndex to be in range of %d items", listSize));
         }
+    }
+
+    private String renderTaskList(String header, List<Task> taskList) {
+        StringBuilder response = new StringBuilder(header);
+        for (int i = 0; i < taskList.size(); i++) {
+            response.append(String.format("\n%d. %s", i + 1, taskList.get(i).renderTask()));
+        }
+        return response.toString();
     }
 
     /**
@@ -171,6 +262,24 @@ public class CommandContext {
     }
 
     /**
+     * Loads the archived tasks from the archive data handler.
+     *
+     * @throws FriedbergException if archived tasks cannot be loaded or deserialized
+     */
+    private void loadArchivedTasksFromDataHandler() throws FriedbergException {
+        String tasksDataString;
+        try {
+            tasksDataString = this.archiveDataHandler.read();
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to load archive data, e: %s", e.getMessage()));
+        }
+        this.archivedTasks = TaskStringParser.deserializeTasks(tasksDataString);
+        assert this.archivedTasks != null : "Successful archive deserialization must return a task list";
+        assert this.archivedTasks.stream().allMatch(task -> task != null)
+                : "A successfully loaded archive list must not contain null entries";
+    }
+
+    /**
      * Saves the tasks to disk using the data handler.
      *
      * @throws FriedbergInternalException if tasks cannot be saved
@@ -181,6 +290,20 @@ public class CommandContext {
             this.dataHandler.write(tasksDataString);
         } catch (Exception e) {
             throw new FriedbergInternalException(String.format("Unable to save data, e: %s", e.getMessage()));
+        }
+    }
+
+    /**
+     * Saves the archived tasks to disk using the archive data handler.
+     *
+     * @throws FriedbergInternalException if archived tasks cannot be saved
+     */
+    private void saveArchivedTasksToDataHandler() throws FriedbergInternalException {
+        String tasksDataString = TaskStringParser.serializeTasks(this.archivedTasks);
+        try {
+            this.archiveDataHandler.write(tasksDataString);
+        } catch (Exception e) {
+            throw new FriedbergInternalException(String.format("Unable to save archive data, e: %s", e.getMessage()));
         }
     }
 }
