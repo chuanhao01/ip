@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import datahandler.DataHandler;
+import exception.FriedbergInternalException;
 import exception.FriedbergUserInputException;
 import task.TaskStatus;
 import task.ToDo;
@@ -34,6 +35,18 @@ class CommandContextTest {
     void constructor_emptyStorage_loadsEmptyList() {
         assertEquals(0, context.getTasksSize());
         assertEquals("Here are the tasks in your list:", context.renderTasks());
+    }
+
+    @Test
+    void constructor_incompleteStoredTask_throwsInternalException() throws Exception {
+        dataHandler.write("name,P");
+
+        FriedbergInternalException error = assertThrows(
+                FriedbergInternalException.class, () -> new CommandContext(dataHandler));
+
+        assertEquals(new FriedbergInternalException(
+                "Expected serialized task to contain name, status, and type").getMessage(), error.getMessage());
+        assertEquals("name,P", dataHandler.read());
     }
 
     @Test

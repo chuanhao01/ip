@@ -25,8 +25,7 @@ public class TodoCommand implements Command {
         String taskName = userInput.replace("todo ", "").strip();
         Task task = new ToDo(taskName);
         commandContext.addTask(task);
-        return String.format("Got it. I've added this task:\n%s\nNow you have %d tasks in the list.",
-                task.renderTask(), commandContext.getTasksSize());
+        return TaskResponseFormatter.formatAddition(task, commandContext.getTasksSize());
     }
 
     @Override
