@@ -29,6 +29,16 @@ public class DataHandler {
     }
 
     /**
+     * Returns the folder used by this data handler.
+     * This helps tests create related storage files in the same temporary folder.
+     *
+     * @return folder where data files are stored
+     */
+    public Path getDataFolderPath() {
+        return this.dataFolderPath;
+    }
+
+    /**
      * Reads the data file and returns its contents as a string.
      *
      * @return contents of the data file

@@ -16,8 +16,11 @@ public class CommandParser {
         new EventCommand(),
         // Read
         new ListCommand(),
+        new ArchiveListCommand(),
         new FindCommand(),
         // Edit
+        new ArchiveCommand(),
+        new UnarchiveCommand(),
         new MarkCommand(),
         new UnMarkCommand(),
         // Delete
