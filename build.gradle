@@ -71,7 +71,7 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'gui.jar'
+    archiveFileName = 'Friedberg.jar'
 }
 
 run {
