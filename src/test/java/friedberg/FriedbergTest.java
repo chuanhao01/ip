@@ -86,6 +86,19 @@ class FriedbergTest {
     }
 
     @Test
+    void processInput_help_returnsDefaultCommandSummary() throws Exception {
+        Friedberg friedberg = createFriedbergWithTempStorage();
+
+        CommandResult helpResult = friedberg.processInput("help");
+
+        assertFalse(helpResult.shouldExit());
+        assertEquals(ResponseType.DEFAULT, helpResult.responseType());
+        assertTrue(helpResult.message().startsWith("Commands available in Friedberg:"));
+        assertTrue(helpResult.message().contains("todo DESCRIPTION"));
+        assertTrue(helpResult.message().contains("bye - Exit Friedberg."));
+    }
+
+    @Test
     void processInput_errorAndBye_returnExpectedFlags() throws Exception {
         Friedberg friedberg = createFriedbergWithTempStorage();
 
@@ -132,7 +145,7 @@ class FriedbergTest {
     void processInput_successfulCommands_returnDisplayableResponses() throws Exception {
         Friedberg friedberg = createFriedbergWithTempStorage();
         String[] inputs = {
-            "list", "find missing", "todo read book", "deadline work /by 2026-09-09",
+            "help", "list", "find missing", "todo read book", "deadline work /by 2026-09-09",
             "event meeting /from 2026-09-09 /to 2026-09-10",
             "mark 1", "unmark 1", "archive 1", "alist", "unarchive 1", "find book", "list", "delete 1", "bye"
         };

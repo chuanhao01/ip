@@ -8,6 +8,7 @@ import exception.FriedbergException;
 public class CommandParser {
     private static Command[] commands = {
         // Misc
+        new HelpCommand(),
         new ByeCommand(),
         // Tasks
         // Create
