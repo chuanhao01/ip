@@ -157,7 +157,7 @@ public final class ParserUtil {
         String prefix = "deadline ";
         if (!userInput.startsWith(prefix)) {
             throw new FriedbergUserInputException(
-                    "Missing task description. Expected: deadline DESCRIPTION /by uuuu-MM-dd");
+                    "Missing task description. Expected: deadline DESCRIPTION /by yyyy-MM-dd");
         }
         String body = userInput.substring(prefix.length());
         String marker = " /by ";
@@ -188,7 +188,7 @@ public final class ParserUtil {
         String prefix = "event ";
         if (!userInput.startsWith(prefix)) {
             throw new FriedbergUserInputException(
-                    "Missing task description. Expected: event DESCRIPTION /from uuuu-MM-dd /to uuuu-MM-dd");
+                    "Missing task description. Expected: event DESCRIPTION /from yyyy-MM-dd /to yyyy-MM-dd");
         }
         String body = userInput.substring(prefix.length());
         String fromMarker = " /from ";
@@ -254,7 +254,7 @@ public final class ParserUtil {
             throws FriedbergUserInputException {
         if (!DATE_PATTERN.matcher(dateText).matches()) {
             throw new FriedbergUserInputException(String.format(
-                    "Date for %s must use uuuu-MM-dd, e.g. 2026-09-10", parameterName));
+                    "Date for %s must use yyyy-MM-dd, e.g. 2026-09-10", parameterName));
         }
         try {
             return LocalDate.parse(dateText, DATE_FORMATTER);

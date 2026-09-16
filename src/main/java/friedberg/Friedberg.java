@@ -65,7 +65,8 @@ public class Friedberg {
      * @return greeting text without terminal decoration
      */
     public String getGreeting() {
-        return "Hello! I'm " + Friedberg.NAME + ".\nI am a chatbot beep boop, what can I do for you?";
+        return "Hello! I'm " + Friedberg.NAME + ".\nI am a chatbot beep boop, what can I do for you?\n"
+                + "Type help to show all available commands.";
     }
 
     /**
