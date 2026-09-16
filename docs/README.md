@@ -4,36 +4,58 @@ Friedberg is a desktop task-management chatbot for users who prefer typing comma
 
 Friedberg provides both a JavaFX graphical interface and a command-line interface. Your tasks are saved automatically, so they remain available the next time you launch the application.
 
-> **Screenshot placeholder — Main window**  
-> Add a screenshot of the JavaFX interface here later. Suggested path: `docs/images/Ui.png`.
+![Friedberg JavaFX interface](Ui.png)
 
 ---
 
 ## Table of contents
 
-- [Quick start](#quick-start)
-- [Reading this guide](#reading-this-guide)
-- [Features](#features)
-  - [Viewing command help](#viewing-command-help-help)
-  - [Adding a to-do](#adding-a-to-do-todo)
-  - [Adding a deadline](#adding-a-deadline-deadline)
-  - [Adding an event](#adding-an-event-event)
-  - [Listing active tasks](#listing-active-tasks-list)
-  - [Finding tasks](#finding-tasks-find)
-  - [Marking a task as done](#marking-a-task-as-done-mark)
-  - [Marking a task as not done](#marking-a-task-as-not-done-unmark)
-  - [Deleting a task](#deleting-a-task-delete)
-  - [Archiving a task](#archiving-a-task-archive)
-  - [Listing archived tasks](#listing-archived-tasks-alist)
-  - [Unarchiving a task](#unarchiving-a-task-unarchive)
-  - [Exiting Friedberg](#exiting-friedberg-bye)
-- [Command format and validation](#command-format-and-validation)
-- [Understanding task display](#understanding-task-display)
-- [Saving data](#saving-data)
-- [Editing data files](#editing-data-files)
-- [FAQ](#faq)
-- [Known limitations](#known-limitations)
-- [Command summary](#command-summary)
+- [Friedberg User Guide](#friedberg-user-guide)
+  - [Table of contents](#table-of-contents)
+  - [Quick start](#quick-start)
+    - [Running the CLI during development](#running-the-cli-during-development)
+  - [Reading this guide](#reading-this-guide)
+    - [Important notes about task indexes](#important-notes-about-task-indexes)
+  - [Features](#features)
+    - [Viewing command help: `help`](#viewing-command-help-help)
+    - [Adding a to-do: `todo`](#adding-a-to-do-todo)
+    - [Adding a deadline: `deadline`](#adding-a-deadline-deadline)
+    - [Adding an event: `event`](#adding-an-event-event)
+    - [Listing active tasks: `list`](#listing-active-tasks-list)
+    - [Finding tasks: `find`](#finding-tasks-find)
+    - [Marking a task as done: `mark`](#marking-a-task-as-done-mark)
+    - [Marking a task as not done: `unmark`](#marking-a-task-as-not-done-unmark)
+    - [Deleting a task: `delete`](#deleting-a-task-delete)
+    - [Archiving a task: `archive`](#archiving-a-task-archive)
+    - [Listing archived tasks: `alist`](#listing-archived-tasks-alist)
+    - [Unarchiving a task: `unarchive`](#unarchiving-a-task-unarchive)
+    - [Exiting Friedberg: `bye`](#exiting-friedberg-bye)
+  - [Command format and validation](#command-format-and-validation)
+    - [Spacing rules](#spacing-rules)
+    - [Required parameters](#required-parameters)
+    - [Duplicate parameters](#duplicate-parameters)
+    - [Index rules](#index-rules)
+    - [Date rules](#date-rules)
+    - [Description and query characters](#description-and-query-characters)
+  - [Understanding task display](#understanding-task-display)
+    - [Task type markers](#task-type-markers)
+    - [Completion markers](#completion-markers)
+  - [Saving data](#saving-data)
+  - [Editing data files](#editing-data-files)
+  - [FAQ](#faq)
+    - [Q: How do I know which task index to use?](#q-how-do-i-know-which-task-index-to-use)
+    - [Q: Why did my task index change?](#q-why-did-my-task-index-change)
+    - [Q: Is deleting the same as archiving?](#q-is-deleting-the-same-as-archiving)
+    - [Q: Where does an unarchived task go?](#q-where-does-an-unarchived-task-go)
+    - [Q: Are completed tasks allowed in the archive?](#q-are-completed-tasks-allowed-in-the-archive)
+    - [Q: Why was my date rejected even though it looked correctly formatted?](#q-why-was-my-date-rejected-even-though-it-looked-correctly-formatted)
+    - [Q: Can an event start and end on the same date?](#q-can-an-event-start-and-end-on-the-same-date)
+    - [Q: Why does Friedberg reject extra spaces?](#q-why-does-friedberg-reject-extra-spaces)
+    - [Q: Can I search archived tasks?](#q-can-i-search-archived-tasks)
+    - [Q: How do I view all available commands?](#q-how-do-i-view-all-available-commands)
+    - [Q: How do I transfer my tasks to another computer?](#q-how-do-i-transfer-my-tasks-to-another-computer)
+  - [Known limitations](#known-limitations)
+  - [Command summary](#command-summary)
 
 ---
 
@@ -57,8 +79,7 @@ Friedberg provides both a JavaFX graphical interface and a command-line interfac
    list
    ```
 
-> **Screenshot placeholder — First command**  
-> Add a screenshot showing `todo read a book` and Friedberg's response. Suggested path: `docs/images/QuickStart.png`.
+![Adding a first task in Friedberg](images/QuickStart.png)
 
 ### Running the CLI during development
 
@@ -126,8 +147,7 @@ The command summary includes the required format for adding, listing, finding, u
 
 `help` does not accept additional parameters.
 
-> **Screenshot placeholder — Help command**  
-> Suggested path: `docs/images/HelpCommand.png`.
+![Friedberg help command output](images/HelpCommand.png)
 
 ---
 
@@ -155,8 +175,7 @@ A newly added to-do is shown with the type marker `[T]` and is initially not com
 [T][ ] read a book
 ```
 
-> **Screenshot placeholder — Adding a to-do**  
-> Suggested path: `docs/images/AddTodo.png`.
+![Adding a to-do task](images/QuickStart.png)
 
 ---
 
@@ -193,8 +212,7 @@ Invalid or nonexistent dates are rejected. For example:
 deadline submit report /by 2026-02-30
 ```
 
-> **Screenshot placeholder — Adding a deadline**  
-> Suggested path: `docs/images/AddDeadline.png`.
+![Adding a deadline task](images/AddDeadline.png)
 
 ---
 
@@ -235,11 +253,10 @@ The `/from` and `/to` parameters:
 Invalid example:
 
 ```text
-event orientation camp /from 2026-08-05 /to 2026-08-03
+event orientation camp /from 2026-08-03 /to 2026-08-05
 ```
 
-> **Screenshot placeholder — Adding an event**  
-> Suggested path: `docs/images/AddEvent.png`.
+![Adding an event task](images/AddEvent.png)
 
 ---
 
@@ -266,8 +283,7 @@ The displayed number is the `TASK_INDEX` used by `mark`, `unmark`, `delete`, and
 
 `list` does not accept additional parameters.
 
-> **Screenshot placeholder — Active task list**  
-> Suggested path: `docs/images/ListTasks.png`.
+![Viewing the active task list](./images/QuickStart.png)
 
 ---
 
@@ -309,8 +325,7 @@ If nothing matches, Friedberg responds:
 There are no tasks matching your search.
 ```
 
-> **Screenshot placeholder — Finding tasks**  
-> Suggested path: `docs/images/FindTasks.png`.
+![Finding active tasks](images/FindTasks.png)
 
 ---
 
@@ -339,8 +354,7 @@ If task `2` is a deadline, its completion marker changes from `[ ]` to `[X]`:
 
 The index must refer to a task currently shown by `list`.
 
-> **Screenshot placeholder — Marking a task**  
-> Suggested path: `docs/images/MarkTask.png`.
+![Marking a task as done](images/MarkTask.png)
 
 ---
 
@@ -388,8 +402,7 @@ Friedberg displays the deleted task and the updated number of active tasks.
 > [!CAUTION]
 > Deleting is permanent. If you may need the task later, use `archive` instead.
 
-> **Screenshot placeholder — Deleting a task**  
-> Suggested path: `docs/images/DeleteTask.png`.
+![Deleting a task](images/DeleteTask.png)
 
 ---
 
@@ -420,8 +433,7 @@ After archiving:
 
 The index must refer to a task currently shown by `list`.
 
-> **Screenshot placeholder — Archiving a task**  
-> Suggested path: `docs/images/ArchiveTask.png`.
+![Archiving a task](images/ArchiveTask.png)
 
 ---
 
@@ -447,8 +459,7 @@ The displayed number is the archive `TASK_INDEX` used by `unarchive`.
 
 `alist` does not accept additional parameters.
 
-> **Screenshot placeholder — Archived task list**  
-> Suggested path: `docs/images/ListArchive.png`.
+![Viewing the archived task list](images/ListArchive.png)
 
 ---
 
@@ -477,8 +488,7 @@ The restored task:
 
 The index must refer to a task currently shown by `alist`, not `list`.
 
-> **Screenshot placeholder — Unarchiving a task**  
-> Suggested path: `docs/images/UnarchiveTask.png`.
+![Unarchiving a task](images/UnarchiveTask.png)
 
 ---
 
@@ -521,7 +531,7 @@ Invalid:
 
 ```text
  todo read a book
-todo read a book 
+todo read a book
 todo  read a book
 todo→read a book
 ```
