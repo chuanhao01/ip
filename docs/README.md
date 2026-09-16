@@ -14,6 +14,7 @@ Friedberg provides both a JavaFX graphical interface and a command-line interfac
 - [Quick start](#quick-start)
 - [Reading this guide](#reading-this-guide)
 - [Features](#features)
+  - [Viewing command help](#viewing-command-help-help)
   - [Adding a to-do](#adding-a-to-do-todo)
   - [Adding a deadline](#adding-a-deadline-deadline)
   - [Adding an event](#adding-an-event-event)
@@ -111,6 +112,25 @@ deadline submit project report /by 2026-09-10
 
 ## Features
 
+### Viewing command help: `help`
+
+Displays all commands supported by Friedberg together with a brief description of what each command does.
+
+**Format:**
+
+```text
+help
+```
+
+The command summary includes the required format for adding, listing, finding, updating, deleting, archiving, and restoring tasks, as well as exiting Friedberg.
+
+`help` does not accept additional parameters.
+
+> **Screenshot placeholder — Help command**  
+> Suggested path: `docs/images/HelpCommand.png`.
+
+---
+
 ### Adding a to-do: `todo`
 
 Adds a task that does not have a date.
@@ -150,7 +170,7 @@ Adds a task that must be completed by a particular date.
 deadline DESCRIPTION /by DATE
 ```
 
-`DATE` must use the exact `uuuu-MM-dd` format.
+`DATE` must use the exact `yyyy-MM-dd` format.
 
 **Examples:**
 
@@ -188,7 +208,7 @@ Adds a task that takes place between two dates.
 event DESCRIPTION /from FROM_DATE /to TO_DATE
 ```
 
-Both dates must use the exact `uuuu-MM-dd` format. `FROM_DATE` must be earlier than `TO_DATE`.
+Both dates must use the exact `yyyy-MM-dd` format. `FROM_DATE` must be earlier than `TO_DATE`.
 
 **Examples:**
 
@@ -701,7 +721,7 @@ Yes. Archiving and unarchiving preserve the task's completion status.
 
 ### Q: Why was my date rejected even though it looked correctly formatted?
 
-The date must both match `uuuu-MM-dd` and exist on the calendar. For example, `2025-02-29` has the correct shape but is not a real date.
+The date must both match `yyyy-MM-dd` and exist on the calendar. For example, `2025-02-29` has the correct shape but is not a real date.
 
 ### Q: Can an event start and end on the same date?
 
@@ -714,6 +734,16 @@ Friedberg uses strict command formatting to identify malformed commands clearly.
 ### Q: Can I search archived tasks?
 
 Not currently. `find` searches the active task list only. Use `alist` to view archived tasks.
+
+### Q: How do I view all available commands?
+
+Enter:
+
+```text
+help
+```
+
+Friedberg will display every command together with its format and a brief description.
 
 ### Q: How do I transfer my tasks to another computer?
 
@@ -738,6 +768,7 @@ Exit Friedberg and copy the complete `data` directory together with the applicat
 
 | Action | Format | Example |
 | --- | --- | --- |
+| Show command help | `help` | `help` |
 | Add a to-do | `todo DESCRIPTION` | `todo read a book` |
 | Add a deadline | `deadline DESCRIPTION /by DATE` | `deadline submit report /by 2026-09-10` |
 | Add an event | `event DESCRIPTION /from FROM_DATE /to TO_DATE` | `event camp /from 2026-08-03 /to 2026-08-05` |
