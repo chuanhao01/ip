@@ -4,6 +4,8 @@ Friedberg is a desktop task-management chatbot for users who prefer typing comma
 
 Friedberg provides both a JavaFX graphical interface and a command-line interface. Your tasks are saved automatically, so they remain available the next time you launch the application.
 
+**[View the Friedberg source code on GitHub](https://github.com/chuanhao01/ip)**
+
 ![Friedberg JavaFX interface](Ui.png)
 
 ---
