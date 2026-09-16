@@ -68,7 +68,7 @@ Friedberg provides both a JavaFX graphical interface and a command-line interfac
 5. Run the graphical application:
 
    ```bash
-   java -jar gui.jar
+   java -jar Friedberg.jar
    ```
 
 6. Type a command in the input field and press <kbd>Enter</kbd> or click **Send**.
