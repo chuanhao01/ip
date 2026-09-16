@@ -59,13 +59,13 @@ class EventCommandTest {
     @Test
     void execute_invalidStartDate_returnsSpecificDateError() throws Exception {
         assertRejectedWithoutChanges("event meeting /from invalid /to 2026-09-10",
-                new FriedbergUserInputException("Date for /from must use uuuu-MM-dd, e.g. 2026-09-10"));
+                new FriedbergUserInputException("Date for /from must use yyyy-MM-dd, e.g. 2026-09-10"));
     }
 
     @Test
     void execute_invalidEndDate_returnsSpecificDateError() throws Exception {
         assertRejectedWithoutChanges("event meeting /from 2026-09-09 /to invalid",
-                new FriedbergUserInputException("Date for /to must use uuuu-MM-dd, e.g. 2026-09-10"));
+                new FriedbergUserInputException("Date for /to must use yyyy-MM-dd, e.g. 2026-09-10"));
     }
 
     @Test
